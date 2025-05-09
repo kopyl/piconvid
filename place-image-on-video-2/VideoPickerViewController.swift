@@ -2,9 +2,11 @@ import UIKit
 
 final class VideoPickerController: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     private weak var presenter: UIViewController?
+    private weak var navigationController: UINavigationController?
 
-    init(presenter: UIViewController) {
+    init(presenter: UIViewController, navigationController: UINavigationController?) {
         self.presenter = presenter
+        self.navigationController = navigationController
     }
 
     func presentVideoPicker() {
@@ -25,6 +27,8 @@ final class VideoPickerController: NSObject, UIImagePickerControllerDelegate, UI
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let videoURL = info[.mediaURL] as? URL {
             print("Selected video URL: \(videoURL)")
+            let selectedVideoViewController = SelectedVideoViewController(videoURL: videoURL)
+            navigationController?.pushViewController(selectedVideoViewController, animated: true)
         }
         picker.dismiss(animated: true)
     }

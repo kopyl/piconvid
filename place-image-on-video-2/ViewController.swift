@@ -14,7 +14,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        videoPicker = VideoPickerController(presenter: self)
+        videoPicker = VideoPickerController(presenter: self, navigationController: navigationController)
     }
 
     func pickVideo() {
