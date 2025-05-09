@@ -1,5 +1,6 @@
 import UIKit
 import AVKit
+import Photos
 
 func getVideoAspectRatio(from playerViewController: AVPlayerViewController) -> CGFloat? {
     guard let asset = playerViewController.player?.currentItem?.asset else { return nil }
@@ -115,7 +116,118 @@ class SelectedVideoView: UIView {
     }
     
     @objc private func saveButtonTappedAction() {
-        print("Saving not implemented yet")
+        guard let videoAsset = playerViewController.player?.currentItem?.asset as? AVURLAsset else {
+            print("Missing video URL")
+            return
+        }
+        
+        let mixComposition = AVMutableComposition()
+        guard let videoTrack = videoAsset.tracks(withMediaType: .video).first else { return }
+        
+        let compositionVideoTrack = mixComposition.addMutableTrack(
+            withMediaType: .video,
+            preferredTrackID: kCMPersistentTrackID_Invalid
+        )
+        
+        do {
+            try compositionVideoTrack?.insertTimeRange(
+                CMTimeRange(start: .zero, duration: videoAsset.duration),
+                of: videoTrack,
+                at: .zero
+            )
+        } catch {
+            print("Failed to insert video: \(error)")
+            return
+        }
+        
+        let videoSize = videoTrack.naturalSize
+        let videoComposition = AVMutableVideoComposition()
+        videoComposition.renderSize = videoSize
+        videoComposition.frameDuration = CMTime(value: 1, timescale: 30)
+        
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRange(start: .zero, duration: videoAsset.duration)
+        let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: compositionVideoTrack!)
+        instruction.layerInstructions = [layerInstruction]
+        videoComposition.instructions = [instruction]
+        
+        // Create layers
+        let parentLayer = CALayer()
+        let videoLayer = CALayer()
+        parentLayer.frame = CGRect(origin: .zero, size: videoSize)
+        videoLayer.frame = CGRect(origin: .zero, size: videoSize)
+        parentLayer.addSublayer(videoLayer)
+
+        // Grab draggable image from subview
+        guard let imageView = self.subviews.first(where: { $0 is DraggableImageView }) as? DraggableImageView,
+              let image = imageView.image else {
+            print("No image to overlay")
+            return
+        }
+
+        let overlayLayer = CALayer()
+        overlayLayer.contents = image.cgImage
+        overlayLayer.contentsGravity = .resizeAspectFill
+        overlayLayer.masksToBounds = true
+
+        // Calculate position relative to video frame
+        let playerView = playerViewController.view!
+        
+        // Convert imageView frame to playerViewController.view
+        let imageFrameInPlayerView = imageView.convert(imageView.bounds, to: playerView)
+        
+        let scaleX = videoSize.width / playerView.frame.width
+        let scaleY = videoSize.height / playerView.frame.height
+        
+        // Final overlay frame (flipped Y)
+        let flippedY = playerView.frame.height - imageFrameInPlayerView.maxY
+        
+        overlayLayer.frame = CGRect(
+            x: imageFrameInPlayerView.minX * scaleX,
+            y: flippedY * scaleY,
+            width: imageFrameInPlayerView.width * scaleX,
+            height: imageFrameInPlayerView.height * scaleY
+        )
+
+        parentLayer.addSublayer(overlayLayer)
+
+        videoComposition.animationTool = AVVideoCompositionCoreAnimationTool(
+            postProcessingAsVideoLayer: videoLayer,
+            in: parentLayer
+        )
+
+        // Export
+        let outputURL = FileManager.default.temporaryDirectory.appendingPathComponent("exported.mov")
+        try? FileManager.default.removeItem(at: outputURL)
+        
+        guard let exporter = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetHighestQuality) else {
+            print("Failed to create exporter")
+            return
+        }
+        exporter.outputURL = outputURL
+        exporter.outputFileType = .mov
+        exporter.videoComposition = videoComposition
+
+        exporter.exportAsynchronously {
+            DispatchQueue.main.async {
+                if exporter.status == .completed {
+                    // Save to Photos
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
+                    }) { success, error in
+                        DispatchQueue.main.async {
+                            if success {
+                                print("✅ Saved to Photos")
+                            } else {
+                                print("❌ Failed saving to Photos: \(error?.localizedDescription ?? "Unknown error")")
+                            }
+                        }
+                    }
+                } else {
+                    print("❌ Export failed: \(exporter.error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
     }
 }
 
