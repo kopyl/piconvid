@@ -13,7 +13,7 @@ class MainView: UIView {
     }
 
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = .appBackground
         
         let pickVideoButton = UIButton(type: .system)
         pickVideoButton.setTitle("Pick Video", for: .normal)
