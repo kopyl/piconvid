@@ -27,10 +27,16 @@ class SelectedVideoView: UIView {
         
         let player = AVPlayer(url: videoURL)
         playerViewController.player = player
-        
+
+        playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(playerViewController.view)
-        playerViewController.view.frame = bounds
+        
+        playerViewController.view.heightAnchor.constraint(equalToConstant: 500).isActive = true
+        playerViewController.view.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        playerViewController.view.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        playerViewController.view.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
         player.play()
     }
     
