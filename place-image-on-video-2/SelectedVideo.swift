@@ -3,35 +3,27 @@ import AVKit
 
 class SelectedVideoView: UIView {
     var pickImageTapped: (() -> Void)?
-    public let playerViewController = AVPlayerViewController()
-    public let videoURL: URL
+    public let playerView: UIView
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(videoURL: URL) {
-        self.videoURL = videoURL
+    init(playerView: UIView) {
+        self.playerView = playerView
         super.init(frame: .zero)
         setupView()
     }
     
     private func setupView() {
-        let player = AVPlayer(url: videoURL)
-        playerViewController.player = player
-        
-        playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(playerViewController.view)
-        
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(playerView)
         NSLayoutConstraint.activate([
-            playerViewController.view.heightAnchor.constraint(equalToConstant: 500),
-            playerViewController.view.widthAnchor.constraint(equalTo: widthAnchor),
-            playerViewController.view.centerXAnchor.constraint(equalTo: centerXAnchor),
-            playerViewController.view.centerYAnchor.constraint(equalTo: centerYAnchor),
+            playerView.heightAnchor.constraint(equalToConstant: 500),
+            playerView.widthAnchor.constraint(equalTo: widthAnchor),
+            playerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            playerView.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
-        
-        player.play()
         
         let pickImageButton = Button(title: "Pick Image to place on top of this video")
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
@@ -47,6 +39,7 @@ class SelectedVideoView: UIView {
 class SelectedVideoViewController: UIViewController {
     var mediaURL: URL?
     private var imagePicker: MediaPickerController!
+    public let playerViewController = AVPlayerViewController()
     
     init(mediaURL: URL) {
         self.mediaURL = mediaURL
@@ -64,7 +57,7 @@ class SelectedVideoViewController: UIViewController {
             return
         }
         
-        let selectedVideoView = SelectedVideoView(videoURL: mediaURL)
+        let selectedVideoView = SelectedVideoView(playerView: playerViewController.view)
         
         selectedVideoView.pickImageTapped = { [weak self] in
             self?.imagePicker.presentMediaPicker(forType: .image)
@@ -78,6 +71,9 @@ class SelectedVideoViewController: UIViewController {
             print(self?.mediaURL ?? "")
         }
         
-        addChild(selectedVideoView.playerViewController)
+        addChild(playerViewController)
+        
+        playerViewController.player = AVPlayer(url: mediaURL)
+        playerViewController.player?.play()
     }
 }
