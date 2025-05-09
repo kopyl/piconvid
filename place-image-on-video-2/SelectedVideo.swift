@@ -37,10 +37,11 @@ class SelectedVideoView: UIView {
 }
 
 class SelectedVideoViewController: UIViewController {
-    var mediaURL: URL?
-    private var imagePicker: MediaPickerController!
-    public let playerViewController = AVPlayerViewController()
     private var selectedVideoView: SelectedVideoView!
+    private var imagePicker: MediaPickerController!
+    
+    var mediaURL: URL?
+    let playerViewController = AVPlayerViewController()
     
     init(mediaURL: URL) {
         self.mediaURL = mediaURL
@@ -51,7 +52,7 @@ class SelectedVideoViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    override func loadView() {
         guard let mediaURL else { return }
         
         selectedVideoView = SelectedVideoView(playerView: playerViewController.view)
@@ -60,15 +61,17 @@ class SelectedVideoViewController: UIViewController {
         }
         view = selectedVideoView
         
+        addChild(playerViewController)
+        
+        playerViewController.player = AVPlayer(url: mediaURL)
+        playerViewController.player?.play()
+    }
+    
+    override func viewDidLoad() {
         imagePicker = MediaPickerController(presenter: self)
         
         imagePicker.imagePicked = { [weak self] url in
             print(self?.mediaURL ?? "")
         }
-        
-        addChild(playerViewController)
-        
-        playerViewController.player = AVPlayer(url: mediaURL)
-        playerViewController.player?.play()
     }
 }
