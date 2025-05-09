@@ -40,11 +40,11 @@ class SelectedVideoViewController: UIViewController {
     private var selectedVideoView: SelectedVideoView!
     private var imagePicker: MediaPickerController!
     
-    var mediaURL: URL?
+    var videoURL: URL?
     let playerViewController = AVPlayerViewController()
     
-    init(mediaURL: URL) {
-        self.mediaURL = mediaURL
+    init(videoURL: URL) {
+        self.videoURL = videoURL
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,7 +53,7 @@ class SelectedVideoViewController: UIViewController {
     }
     
     override func loadView() {
-        guard let mediaURL else { return }
+        guard let videoURL else { return }
         
         selectedVideoView = SelectedVideoView(playerView: playerViewController.view)
         selectedVideoView.pickImageTapped = { [weak self] in
@@ -61,7 +61,7 @@ class SelectedVideoViewController: UIViewController {
         }
         view = selectedVideoView
         
-        playerViewController.player = AVPlayer(url: mediaURL)
+        playerViewController.player = AVPlayer(url: videoURL)
         playerViewController.player?.play()
         addChild(playerViewController)
     }
@@ -69,8 +69,8 @@ class SelectedVideoViewController: UIViewController {
     override func viewDidLoad() {
         imagePicker = MediaPickerController(presenter: self)
         
-        imagePicker.imagePicked = { [weak self] url in
-            print(self?.mediaURL ?? "")
+        imagePicker.imagePicked = { [weak self] imageURL in
+            print(self?.videoURL ?? "", imageURL)
         }
     }
 }

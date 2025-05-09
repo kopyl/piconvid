@@ -39,8 +39,8 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         videoPicker = MediaPickerController(presenter: self)
         
-        videoPicker.videoPicked = { [weak self] url in
-            let selectedVideoViewController = SelectedVideoViewController(mediaURL: url)
+        videoPicker.videoPicked = { [weak self] videoURL in
+            let selectedVideoViewController = SelectedVideoViewController(videoURL: videoURL)
             self?.navigationController?.pushViewController(selectedVideoViewController, animated: true)
         }
     }
