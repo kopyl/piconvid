@@ -117,7 +117,6 @@ class SelectedVideoView: UIView {
     
     @objc private func saveButtonTappedAction() {
         guard let videoAsset = playerViewController.player?.currentItem?.asset as? AVURLAsset else {
-            print("Missing video URL")
             return
         }
         
@@ -136,7 +135,6 @@ class SelectedVideoView: UIView {
                 at: .zero
             )
         } catch {
-            print("Failed to insert video: \(error)")
             return
         }
         
@@ -151,17 +149,14 @@ class SelectedVideoView: UIView {
         instruction.layerInstructions = [layerInstruction]
         videoComposition.instructions = [instruction]
         
-        // Create layers
         let parentLayer = CALayer()
         let videoLayer = CALayer()
         parentLayer.frame = CGRect(origin: .zero, size: videoSize)
         videoLayer.frame = CGRect(origin: .zero, size: videoSize)
         parentLayer.addSublayer(videoLayer)
-
-        // Grab draggable image from subview
+        
         guard let imageView = self.subviews.first(where: { $0 is DraggableImageView }) as? DraggableImageView,
               let image = imageView.image else {
-            print("No image to overlay")
             return
         }
 
@@ -169,17 +164,14 @@ class SelectedVideoView: UIView {
         overlayLayer.contents = image.cgImage
         overlayLayer.contentsGravity = .resizeAspectFill
         overlayLayer.masksToBounds = true
-
-        // Calculate position relative to video frame
+        
         let playerView = playerViewController.view!
         
-        // Convert imageView frame to playerViewController.view
         let imageFrameInPlayerView = imageView.convert(imageView.bounds, to: playerView)
         
         let scaleX = videoSize.width / playerView.frame.width
         let scaleY = videoSize.height / playerView.frame.height
         
-        // Final overlay frame (flipped Y)
         let flippedY = playerView.frame.height - imageFrameInPlayerView.maxY
         
         overlayLayer.frame = CGRect(
@@ -195,37 +187,26 @@ class SelectedVideoView: UIView {
             postProcessingAsVideoLayer: videoLayer,
             in: parentLayer
         )
-
-        // Export
+        
         let outputURL = FileManager.default.temporaryDirectory.appendingPathComponent("exported.mov")
         try? FileManager.default.removeItem(at: outputURL)
         
         guard let exporter = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetHighestQuality) else {
-            print("Failed to create exporter")
             return
         }
         exporter.outputURL = outputURL
         exporter.outputFileType = .mov
         exporter.videoComposition = videoComposition
-
+        
         exporter.exportAsynchronously {
             DispatchQueue.main.async {
-                if exporter.status == .completed {
-                    // Save to Photos
+                guard exporter.status == .completed else { return }
                     PHPhotoLibrary.shared().performChanges({
                         PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
                     }) { success, error in
-                        DispatchQueue.main.async {
-                            if success {
-                                print("✅ Saved to Photos")
-                            } else {
-                                print("❌ Failed saving to Photos: \(error?.localizedDescription ?? "Unknown error")")
-                            }
-                        }
+                        guard success else { return }
+                        print("✅ Saved to Photos")
                     }
-                } else {
-                    print("❌ Export failed: \(exporter.error?.localizedDescription ?? "Unknown error")")
-                }
             }
         }
     }
