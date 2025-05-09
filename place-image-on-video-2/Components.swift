@@ -17,7 +17,7 @@ class Button: UIButton {
     private func setup() {
         guard let title else { return }
         setTitle(title, for: .normal)
-        titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         translatesAutoresizingMaskIntoConstraints = false
         setTitleColor(.systemBlue, for: .normal)
     }
