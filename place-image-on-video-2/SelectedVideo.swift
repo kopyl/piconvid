@@ -53,9 +53,7 @@ class SelectedVideoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let mediaURL else {
-            return
-        }
+        guard let mediaURL else { return }
         
         let selectedVideoView = SelectedVideoView(playerView: playerViewController.view)
         
