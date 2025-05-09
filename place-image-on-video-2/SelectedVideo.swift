@@ -52,6 +52,7 @@ class DraggableImageView: UIImageView {
 class SelectedVideoView: UIView {
     var pickImageTapped: (() -> Void)?
     private var playerViewController: AVPlayerViewController
+    public var pickImageButton: Button
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -59,6 +60,7 @@ class SelectedVideoView: UIView {
     
     init(playerViewController: AVPlayerViewController) {
         self.playerViewController = playerViewController
+        pickImageButton = Button(title: "Pick Image to place on top of this video")
         super.init(frame: .zero)
         setupView()
     }
@@ -71,7 +73,6 @@ class SelectedVideoView: UIView {
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(playerViewController.view)
         
-        let pickImageButton = Button(title: "Pick Image to place on top of this video")
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         addSubview(pickImageButton)
         pickImageButton.placeAtTheBottom(of: self)
@@ -82,10 +83,6 @@ class SelectedVideoView: UIView {
             playerViewController.view.widthAnchor.constraint(equalTo: widthAnchor, constant: -50),
             playerViewController.view.heightAnchor.constraint(equalTo: playerViewController.view.widthAnchor, multiplier: 1 / videoAspectRatio),
        ])
-    }
-    
-    @objc private func pickImageTappedAction() {
-        pickImageTapped?()
     }
     
     public func addImage(image: URL) {
@@ -104,6 +101,21 @@ class SelectedVideoView: UIView {
             imageView.bottomAnchor.constraint(equalTo: playerViewController.view.bottomAnchor),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: imageRatio),
         ])
+    }
+    
+    public func addSaveButton() {
+        let saveButton = Button(title: "Save video")
+        saveButton.addTarget(self, action: #selector(saveButtonTappedAction), for: .touchUpInside)
+        addSubview(saveButton)
+        saveButton.placeAtTheBottom(of: self)
+    }
+    
+    @objc private func pickImageTappedAction() {
+        pickImageTapped?()
+    }
+    
+    @objc private func saveButtonTappedAction() {
+        print("Saving not implemented yet")
     }
 }
 
@@ -142,8 +154,9 @@ class SelectedVideoViewController: UIViewController {
         imagePicker = MediaPickerController(presenter: self)
         
         imagePicker.imagePicked = { [weak self] imageURL in
-            print(self?.videoURL ?? "", imageURL)
             self?.selectedVideoView.addImage(image: imageURL)
+            self?.selectedVideoView.pickImageButton.layer.opacity = 0
+            self?.selectedVideoView.addSaveButton()
         }
         
     }
