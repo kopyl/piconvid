@@ -12,9 +12,7 @@ class MainView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupView() {
-        backgroundColor = .appBackground
-        
+    private func setupView() {        
         let pickVideoButton = Button(title: "Pick Video")
         pickVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         addSubview(pickVideoButton)

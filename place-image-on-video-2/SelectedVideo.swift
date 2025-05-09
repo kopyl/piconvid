@@ -17,8 +17,6 @@ class SelectedVideoView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .appBackground
-        
         let player = AVPlayer(url: videoURL)
         playerViewController.player = player
         
