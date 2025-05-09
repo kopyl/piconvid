@@ -159,6 +159,5 @@ class SelectedVideoViewController: UIViewController {
             self?.selectedVideoView.pickImageButton.layer.opacity = 0
             self?.selectedVideoView.addSaveButton()
         }
-        
     }
 }
