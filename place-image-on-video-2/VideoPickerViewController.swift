@@ -14,7 +14,7 @@ final class VideoPickerController: NSObject, UIImagePickerControllerDelegate, UI
             print("Photo Library not available")
             return
         }
-
+        
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
         picker.mediaTypes = ["public.movie"]
