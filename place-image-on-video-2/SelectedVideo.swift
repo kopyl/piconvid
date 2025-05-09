@@ -68,6 +68,8 @@ class SelectedVideoView: UIView {
     }
     
     private func setupView() {
+        backgroundColor = .appBackground
+        
         guard let videoAspectRatio = getVideoAspectRatio(from: playerViewController) else { return }
         
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
