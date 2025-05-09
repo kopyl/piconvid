@@ -4,8 +4,7 @@ class ViewController: UIViewController {
     private var videoPicker: VideoPickerController!
 
     override func loadView() {
-        view = MainView()
-        (view as? MainView)?.delegate = self
+        view = MainView(delegate: self)
     }
 
     override func viewDidLoad() {
