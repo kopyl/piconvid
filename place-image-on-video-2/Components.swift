@@ -21,4 +21,11 @@ class Button: UIButton {
         translatesAutoresizingMaskIntoConstraints = false
         setTitleColor(.systemBlue, for: .normal)
     }
+    
+    public func placeAtTheBottom(of view: UIView) {
+        NSLayoutConstraint.activate([
+            centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60),
+        ])
+    }
 }

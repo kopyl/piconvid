@@ -37,12 +37,8 @@ class SelectedVideoView: UIView {
         
         let pickImageButton = Button(title: "Pick Image to place on top of this video")
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
-        
         addSubview(pickImageButton)
-        NSLayoutConstraint.activate([
-            pickImageButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            pickImageButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -60),
-        ])
+        pickImageButton.placeAtTheBottom(of: self)
     }
     
     @objc private func pickImageTappedAction() {

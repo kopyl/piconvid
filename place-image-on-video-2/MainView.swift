@@ -17,13 +17,8 @@ class MainView: UIView {
         
         let pickVideoButton = Button(title: "Pick Video")
         pickVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
-        
         addSubview(pickVideoButton)
-        
-        NSLayoutConstraint.activate([
-            pickVideoButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            pickVideoButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -60),
-        ])
+        pickVideoButton.placeAtTheBottom(of: self)
     }
     
     @objc private func pickVideoTappedAction() {
