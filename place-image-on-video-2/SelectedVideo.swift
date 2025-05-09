@@ -134,6 +134,19 @@ class SelectedVideoView: UIView {
                 of: videoTrack,
                 at: .zero
             )
+            
+            if let audioTrack = videoAsset.tracks(withMediaType: .audio).first {
+                let compositionAudioTrack = mixComposition.addMutableTrack(
+                    withMediaType: .audio,
+                    preferredTrackID: kCMPersistentTrackID_Invalid
+                )
+                
+                try compositionAudioTrack?.insertTimeRange(
+                    CMTimeRange(start: .zero, duration: videoAsset.duration),
+                    of: audioTrack,
+                    at: .zero
+                )
+            }
         } catch {
             return
         }
