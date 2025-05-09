@@ -139,6 +139,7 @@ class SelectedVideoViewController: UIViewController {
         guard let videoURL else { return }
         
         playerViewController.player = AVPlayer(url: videoURL)
+        playerViewController.player?.isMuted = true
         selectedVideoView = SelectedVideoView(playerViewController: playerViewController)
         selectedVideoView.pickImageTapped = { [weak self] in
             self?.imagePicker.presentMediaPicker(forType: .image)
