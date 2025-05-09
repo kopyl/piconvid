@@ -24,5 +24,7 @@
 		<key>UIImageName</key>
 		<string></string>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to select a video from your photo library which we later place a picture on.</string>
 </dict>
 </plist>
