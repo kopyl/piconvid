@@ -2,12 +2,12 @@ import UIKit
 
 class MainView: UIView {
     var pickVideoTapped: (() -> Void)?
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    
+    init() {
+        super.init(frame: .zero)
         setupView()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

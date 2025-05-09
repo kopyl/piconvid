@@ -6,12 +6,6 @@ class SelectedVideoView: UIView {
     public let playerViewController = AVPlayerViewController()
     public let videoURL: URL
 
-    override init(frame: CGRect) {
-        self.videoURL = URL(fileURLWithPath: "")  // likely needs refactoring
-        super.init(frame: frame)
-        setupView()
-    }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
