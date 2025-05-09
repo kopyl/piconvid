@@ -73,7 +73,7 @@ class SelectedVideoViewController: UIViewController {
         let selectedVideoView = SelectedVideoView(videoURL: mediaURL)
         
         selectedVideoView.pickImageTapped = { [weak self] in
-            self?.imagePicker.presentMediaPicker(forType: "public.image")
+            self?.imagePicker.presentMediaPicker(forType: .image)
         }
         
         view = selectedVideoView

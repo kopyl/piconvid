@@ -38,7 +38,7 @@ class MainViewController: UIViewController {
     override func loadView() {
         mainView = MainView()
         mainView.pickVideoTapped = { [weak self] in
-            self?.videoPicker.presentMediaPicker(forType: "public.movie")
+            self?.videoPicker.presentMediaPicker(forType: .video)
         }
         view = mainView
     }

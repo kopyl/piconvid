@@ -1,5 +1,10 @@
 import UIKit
 
+enum MediaTypes: String {
+    case image = "public.image"
+    case video = "public.movie"
+}
+
 final class MediaPickerController: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     private weak var presenter: UIViewController?
     
@@ -10,14 +15,14 @@ final class MediaPickerController: NSObject, UIImagePickerControllerDelegate, UI
         self.presenter = presenter
     }
 
-    func presentMediaPicker(forType mediaType: String) {
+    func presentMediaPicker(forType mediaType: MediaTypes) {
         guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
             return
         }
         
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
-        picker.mediaTypes = [mediaType]
+        picker.mediaTypes = [mediaType.rawValue]
         picker.allowsEditing = false
         picker.delegate = self
 
