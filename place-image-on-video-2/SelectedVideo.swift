@@ -2,12 +2,12 @@ import UIKit
 import AVKit
 
 class SelectedVideoView: UIView {
-    var pickVideoTapped: (() -> Void)?
+    var pickImageTapped: (() -> Void)?
     public let playerViewController = AVPlayerViewController()
     public let videoURL: URL
 
     override init(frame: CGRect) {
-        self.videoURL = URL(fileURLWithPath: "")
+        self.videoURL = URL(fileURLWithPath: "")  // likely needs refactoring
         super.init(frame: frame)
         setupView()
     }
@@ -40,18 +40,28 @@ class SelectedVideoView: UIView {
         ])
         
         player.play()
+        
+        let pickImageButton = Button(title: "Pick Image to place on top of this video")
+        pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
+        
+        addSubview(pickImageButton)
+        NSLayoutConstraint.activate([
+            pickImageButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            pickImageButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -60),
+        ])
     }
     
-    @objc private func pickVideoTappedAction() {
-        pickVideoTapped?()
+    @objc private func pickImageTappedAction() {
+        pickImageTapped?()
     }
 }
 
 class SelectedVideoViewController: UIViewController {
-    var videoURL: URL?
+    var mediaURL: URL?
+    private var imagePicker: MediaPickerController!
 
-    init(videoURL: URL) {
-        self.videoURL = videoURL
+    init(mediaURL: URL) {
+        self.mediaURL = mediaURL
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -62,14 +72,31 @@ class SelectedVideoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let videoURL else {
-            return
-        }
-        view = SelectedVideoView(videoURL: videoURL)
-        guard let playerViewController = (view as? SelectedVideoView)?.playerViewController else {
+        guard let mediaURL else {
             return
         }
         
-        addChild(playerViewController)
+        let selectedVideoView = SelectedVideoView(videoURL: mediaURL)
+        
+        selectedVideoView.pickImageTapped = { [weak self] in
+            self?.pickPhoto()
+        }
+        
+        view = selectedVideoView
+
+        
+        imagePicker = MediaPickerController(
+            presenter: self
+        )
+        
+        imagePicker.imagePicked = { [weak self] url in
+            guard let self = self else { return }
+        }
+        
+        addChild(selectedVideoView.playerViewController)
+    }
+    
+    func pickPhoto() {
+        imagePicker.presentMediaPicker(forType: "public.image")
     }
 }

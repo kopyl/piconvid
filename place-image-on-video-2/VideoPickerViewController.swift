@@ -1,19 +1,17 @@
 import UIKit
 
-final class VideoPickerController: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+final class MediaPickerController: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     private weak var presenter: UIViewController?
-    private var mediaType: String
     
     var videoPicked: ((URL) -> Void)?
+    var imagePicked: ((URL) -> Void)?
 
-    init(presenter: UIViewController, mediaType: String) {
+    init(presenter: UIViewController) {
         self.presenter = presenter
-        self.mediaType = mediaType
     }
 
-    func presentVideoPicker() {
+    func presentMediaPicker(forType mediaType: String) {
         guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
-            print("Photo Library not available")
             return
         }
         
@@ -29,6 +27,9 @@ final class VideoPickerController: NSObject, UIImagePickerControllerDelegate, UI
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let videoURL = info[.mediaURL] as? URL {
             videoPicked?(videoURL)
+        }
+        else if let imageURL = info[.imageURL] as? URL {
+            imagePicked?(imageURL)
         }
         picker.dismiss(animated: true)
     }

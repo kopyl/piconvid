@@ -15,17 +15,14 @@ class MainView: UIView {
     private func setupView() {
         backgroundColor = .appBackground
         
-        let pickVideoButton = UIButton(type: .system)
-        pickVideoButton.setTitle("Pick Video", for: .normal)
-        pickVideoButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        let pickVideoButton = Button(title: "Pick Video")
         pickVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
-        pickVideoButton.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(pickVideoButton)
 
         NSLayoutConstraint.activate([
             pickVideoButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            pickVideoButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            pickVideoButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -60),
         ])
     }
     
@@ -36,7 +33,7 @@ class MainView: UIView {
 
 class MainViewController: UIViewController {
     private var mainView: MainView!
-    private var videoPicker: VideoPickerController!
+    private var videoPicker: MediaPickerController!
 
     override func loadView() {
         mainView = MainView()
@@ -49,18 +46,17 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        videoPicker = VideoPickerController(
-            presenter: self,
-            mediaType: "public.movie"
+        videoPicker = MediaPickerController(
+            presenter: self
         )
         
         videoPicker.videoPicked = { [weak self] url in
-            let selectedVideoViewController = SelectedVideoViewController(videoURL: url)
+            let selectedVideoViewController = SelectedVideoViewController(mediaURL: url)
             self?.navigationController?.pushViewController(selectedVideoViewController, animated: true)
         }
     }
 
     func pickVideo() {
-        videoPicker.presentVideoPicker()
+        videoPicker.presentMediaPicker(forType: "public.movie")
     }
 }
