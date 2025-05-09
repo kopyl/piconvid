@@ -1,4 +1,5 @@
 import UIKit
+import AVKit
 
 enum MediaTypes: String {
     case image = "public.image"
@@ -21,10 +22,12 @@ final class MediaPickerController: NSObject, UIImagePickerControllerDelegate, UI
         }
         
         let picker = UIImagePickerController()
+        picker.videoExportPreset = AVAssetExportPresetPassthrough
         picker.sourceType = .photoLibrary
         picker.mediaTypes = [mediaType.rawValue]
         picker.allowsEditing = false
         picker.delegate = self
+        picker.videoQuality = .typeHigh
         
         presenter?.present(picker, animated: true)
     }
