@@ -38,7 +38,7 @@ class MainViewController: UIViewController {
     override func loadView() {
         mainView = MainView()
         mainView.pickVideoTapped = { [weak self] in
-            self?.pickVideo()
+            self?.videoPicker.presentMediaPicker(forType: "public.movie")
         }
         view = mainView
     }
@@ -46,17 +46,11 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        videoPicker = MediaPickerController(
-            presenter: self
-        )
+        videoPicker = MediaPickerController(presenter: self)
         
         videoPicker.videoPicked = { [weak self] url in
             let selectedVideoViewController = SelectedVideoViewController(mediaURL: url)
             self?.navigationController?.pushViewController(selectedVideoViewController, animated: true)
         }
-    }
-
-    func pickVideo() {
-        videoPicker.presentMediaPicker(forType: "public.movie")
     }
 }

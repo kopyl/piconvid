@@ -79,24 +79,18 @@ class SelectedVideoViewController: UIViewController {
         let selectedVideoView = SelectedVideoView(videoURL: mediaURL)
         
         selectedVideoView.pickImageTapped = { [weak self] in
-            self?.pickPhoto()
+            self?.imagePicker.presentMediaPicker(forType: "public.image")
         }
         
         view = selectedVideoView
 
         
-        imagePicker = MediaPickerController(
-            presenter: self
-        )
+        imagePicker = MediaPickerController(presenter: self)
         
         imagePicker.imagePicked = { [weak self] url in
-            guard let self = self else { return }
+            print(self?.mediaURL ?? "")
         }
         
         addChild(selectedVideoView.playerViewController)
-    }
-    
-    func pickPhoto() {
-        imagePicker.presentMediaPicker(forType: "public.image")
     }
 }
