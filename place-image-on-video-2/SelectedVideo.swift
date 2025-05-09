@@ -40,6 +40,7 @@ class SelectedVideoViewController: UIViewController {
     var mediaURL: URL?
     private var imagePicker: MediaPickerController!
     public let playerViewController = AVPlayerViewController()
+    private var selectedVideoView: SelectedVideoView!
     
     init(mediaURL: URL) {
         self.mediaURL = mediaURL
@@ -53,12 +54,10 @@ class SelectedVideoViewController: UIViewController {
     override func viewDidLoad() {
         guard let mediaURL else { return }
         
-        let selectedVideoView = SelectedVideoView(playerView: playerViewController.view)
-        
+        selectedVideoView = SelectedVideoView(playerView: playerViewController.view)
         selectedVideoView.pickImageTapped = { [weak self] in
             self?.imagePicker.presentMediaPicker(forType: .image)
         }
-        
         view = selectedVideoView
         
         imagePicker = MediaPickerController(presenter: self)
