@@ -3,10 +3,12 @@ import UIKit
 final class VideoPickerController: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     private weak var presenter: UIViewController?
     private weak var navigationController: UINavigationController?
+    private var mediaType: String
 
-    init(presenter: UIViewController, navigationController: UINavigationController?) {
+    init(presenter: UIViewController, navigationController: UINavigationController?, mediaType: String) {
         self.presenter = presenter
         self.navigationController = navigationController
+        self.mediaType = mediaType
     }
 
     func presentVideoPicker() {
@@ -17,7 +19,7 @@ final class VideoPickerController: NSObject, UIImagePickerControllerDelegate, UI
         
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
-        picker.mediaTypes = ["public.movie"]
+        picker.mediaTypes = [mediaType]
         picker.allowsEditing = false
         picker.delegate = self
 
