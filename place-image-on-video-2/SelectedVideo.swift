@@ -14,14 +14,10 @@ class DraggableImageView: UIImageView {
     private var initialTouchPoint: CGPoint = .zero
     private var playerViewController: AVPlayerViewController?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     init(playerViewController: AVPlayerViewController) {
         super.init(frame: .zero)
         isUserInteractionEnabled = true
@@ -38,18 +34,18 @@ class DraggableImageView: UIImageView {
               let superview = self.superview else { return }
 
         let locationInSuperview = touch.location(in: superview)
-         self.center.y = locationInSuperview.y - initialTouchPoint.y + self.bounds.size.height / 2
-        
+        var centerY: CGFloat = 0
+        centerY = locationInSuperview.y - initialTouchPoint.y + self.bounds.size.height / 2
+
         let bottomLimit = playerViewController?.view.frame.minY ?? 0
         let topLimit = playerViewController?.view.frame.maxY ?? 0
-        if self.center.y < bottomLimit + self.bounds.size.height / 2 {
-            self.center.y = bottomLimit + self.bounds.size.height / 2
-        } else if self.center.y > topLimit - self.bounds.size.height / 2 {
-            self.center.y = topLimit - self.bounds.size.height / 2
+        if centerY < bottomLimit + self.bounds.size.height / 2 {
+            centerY = bottomLimit + self.bounds.size.height / 2
+        } else if centerY > topLimit - self.bounds.size.height / 2 {
+            centerY = topLimit - self.bounds.size.height / 2
         }
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        self.center.y = centerY
     }
 }
 
@@ -95,7 +91,7 @@ class SelectedVideoView: UIView {
     public func addImage(image: URL) {
         let imageView = DraggableImageView(playerViewController: playerViewController)
         imageView.image = UIImage(contentsOfFile: image.path)
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(imageView)
