@@ -37,8 +37,6 @@ class MainViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
         videoPicker = MediaPickerController(presenter: self)
         
         videoPicker.videoPicked = { [weak self] url in
