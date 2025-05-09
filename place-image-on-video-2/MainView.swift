@@ -19,7 +19,7 @@ class MainView: UIView {
         pickVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         
         addSubview(pickVideoButton)
-
+        
         NSLayoutConstraint.activate([
             pickVideoButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             pickVideoButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -60),
@@ -34,7 +34,7 @@ class MainView: UIView {
 class MainViewController: UIViewController {
     private var mainView: MainView!
     private var videoPicker: MediaPickerController!
-
+    
     override func loadView() {
         mainView = MainView()
         mainView.pickVideoTapped = { [weak self] in

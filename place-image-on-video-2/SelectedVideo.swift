@@ -5,7 +5,7 @@ class SelectedVideoView: UIView {
     var pickImageTapped: (() -> Void)?
     public let playerViewController = AVPlayerViewController()
     public let videoURL: URL
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -15,15 +15,15 @@ class SelectedVideoView: UIView {
         super.init(frame: .zero)
         setupView()
     }
-
+    
     private func setupView() {
         backgroundColor = .appBackground
         
         let player = AVPlayer(url: videoURL)
         playerViewController.player = player
-
+        
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         addSubview(playerViewController.view)
         
         NSLayoutConstraint.activate([
@@ -53,16 +53,16 @@ class SelectedVideoView: UIView {
 class SelectedVideoViewController: UIViewController {
     var mediaURL: URL?
     private var imagePicker: MediaPickerController!
-
+    
     init(mediaURL: URL) {
         self.mediaURL = mediaURL
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,7 +77,6 @@ class SelectedVideoViewController: UIViewController {
         }
         
         view = selectedVideoView
-
         
         imagePicker = MediaPickerController(presenter: self)
         

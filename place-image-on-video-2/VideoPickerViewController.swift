@@ -10,11 +10,11 @@ final class MediaPickerController: NSObject, UIImagePickerControllerDelegate, UI
     
     var videoPicked: ((URL) -> Void)?
     var imagePicked: ((URL) -> Void)?
-
+    
     init(presenter: UIViewController) {
         self.presenter = presenter
     }
-
+    
     func presentMediaPicker(forType mediaType: MediaTypes) {
         guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
             return
@@ -25,10 +25,10 @@ final class MediaPickerController: NSObject, UIImagePickerControllerDelegate, UI
         picker.mediaTypes = [mediaType.rawValue]
         picker.allowsEditing = false
         picker.delegate = self
-
+        
         presenter?.present(picker, animated: true)
     }
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let videoURL = info[.mediaURL] as? URL {
             videoPicked?(videoURL)
@@ -38,7 +38,7 @@ final class MediaPickerController: NSObject, UIImagePickerControllerDelegate, UI
         }
         picker.dismiss(animated: true)
     }
-
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
     }
