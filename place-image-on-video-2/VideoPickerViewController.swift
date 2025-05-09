@@ -28,7 +28,6 @@ final class VideoPickerController: NSObject, UIImagePickerControllerDelegate, UI
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let videoURL = info[.mediaURL] as? URL {
-            let selectedVideoViewController = SelectedVideoViewController(videoURL: videoURL)
             videoPicked?(videoURL)
         }
         picker.dismiss(animated: true)
