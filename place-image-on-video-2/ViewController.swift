@@ -1,10 +1,15 @@
 import UIKit
 
 class ViewController: UIViewController {
+    private var mainView: MainView!
     private var videoPicker: VideoPickerController!
 
     override func loadView() {
-        view = MainView(delegate: self)
+        mainView = MainView()
+        mainView.pickVideoTapped = { [weak self] in
+            self?.pickVideo()
+        }
+        view = mainView
     }
 
     override func viewDidLoad() {

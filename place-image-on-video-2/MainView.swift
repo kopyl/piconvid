@@ -1,16 +1,10 @@
 import UIKit
 
 class MainView: UIView {
-    weak var delegate: ViewController?
+    var pickVideoTapped: (() -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
-    }
-    
-    init(delegate: ViewController) {
-        self.delegate = delegate
-        super.init(frame: .zero)
         setupView()
     }
 
@@ -24,7 +18,7 @@ class MainView: UIView {
         let pickVideoButton = UIButton(type: .system)
         pickVideoButton.setTitle("Pick Video", for: .normal)
         pickVideoButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        pickVideoButton.addTarget(self, action: #selector(pickVideoTapped), for: .touchUpInside)
+        pickVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         pickVideoButton.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(pickVideoButton)
@@ -35,7 +29,7 @@ class MainView: UIView {
         ])
     }
     
-    @objc func pickVideoTapped() {
-        delegate?.pickVideo()
+    @objc private func pickVideoTappedAction() {
+        pickVideoTapped?()
     }
 }
