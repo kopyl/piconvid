@@ -61,10 +61,9 @@ class SelectedVideoViewController: UIViewController {
         }
         view = selectedVideoView
         
-        addChild(playerViewController)
-        
         playerViewController.player = AVPlayer(url: mediaURL)
         playerViewController.player?.play()
+        addChild(playerViewController)
     }
     
     override func viewDidLoad() {
