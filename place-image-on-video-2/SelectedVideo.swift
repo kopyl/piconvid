@@ -71,6 +71,5 @@ class SelectedVideoViewController: UIViewController {
         }
         
         addChild(playerViewController)
-        
     }
 }
