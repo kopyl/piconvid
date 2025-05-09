@@ -54,6 +54,7 @@ class SelectedVideoView: UIView {
     var pickImageTapped: (() -> Void)?
     private var playerViewController: AVPlayerViewController
     public var pickImageButton: Button
+    public var imageView: DraggableImageView?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -87,7 +88,8 @@ class SelectedVideoView: UIView {
     }
     
     public func addImage(image: URL) {
-        let imageView = DraggableImageView(playerViewController: playerViewController)
+        imageView = DraggableImageView(playerViewController: playerViewController)
+        guard let imageView else { return }
         imageView.image = UIImage(contentsOfFile: image.path)
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -152,26 +154,47 @@ class SelectedVideoView: UIView {
         }
         
         let videoSize = videoTrack.naturalSize
+        
         let videoComposition = AVMutableVideoComposition()
-        videoComposition.renderSize = videoSize
+        
+        guard let imageView else { return }
+        guard let overlaySize = imageView.image?.size else { return }
+        
+        let finalWidth = max(videoSize.width, overlaySize.width)
+        let aspectRatio = videoSize.width / videoSize.height
+        let finalHeight = finalWidth / aspectRatio
+        let renderSize = CGSize(width: finalWidth, height: finalHeight)
+        
+        videoComposition.renderSize = CGSize(width: finalWidth, height: finalHeight)
+        
         videoComposition.frameDuration = CMTime(value: 1, timescale: 30)
         
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRange(start: .zero, duration: videoAsset.duration)
         let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: compositionVideoTrack!)
+        
+        let naturalSize = videoTrack.naturalSize
+        let scale = CGAffineTransform(scaleX: renderSize.width / naturalSize.width,
+                                      y: renderSize.height / naturalSize.height)
+
+        layerInstruction.setTransform(scale, at: .zero)
+        
         instruction.layerInstructions = [layerInstruction]
         videoComposition.instructions = [instruction]
         
         let parentLayer = CALayer()
         let videoLayer = CALayer()
-        parentLayer.frame = CGRect(origin: .zero, size: videoSize)
-        videoLayer.frame = CGRect(origin: .zero, size: videoSize)
+        
+        parentLayer.frame = CGRect(origin: .zero, size: renderSize)
+        videoLayer.frame = CGRect(origin: .zero, size: renderSize)
         parentLayer.addSublayer(videoLayer)
         
         guard let imageView = self.subviews.first(where: { $0 is DraggableImageView }) as? DraggableImageView,
               let image = imageView.image else {
             return
         }
+        
+        print(parentLayer.frame.size, videoLayer.frame.size)
 
         let overlayLayer = CALayer()
         overlayLayer.contents = image.cgImage
@@ -182,8 +205,8 @@ class SelectedVideoView: UIView {
         
         let imageFrameInPlayerView = imageView.convert(imageView.bounds, to: playerView)
         
-        let scaleX = videoSize.width / playerView.frame.width
-        let scaleY = videoSize.height / playerView.frame.height
+        let scaleX = renderSize.width / playerView.frame.width
+        let scaleY = renderSize.height / playerView.frame.height
         
         let flippedY = playerView.frame.height - imageFrameInPlayerView.maxY
         
