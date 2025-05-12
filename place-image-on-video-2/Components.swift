@@ -29,3 +29,14 @@ class Button: UIButton {
         ])
     }
 }
+
+class Alert: UIAlertController {
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    init(title: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.title = title
+    }
+}

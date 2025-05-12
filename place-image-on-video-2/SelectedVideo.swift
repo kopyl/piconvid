@@ -52,6 +52,8 @@ class DraggableImageView: UIImageView {
 
 class SelectedVideoView: UIView {
     var pickImageTapped: (() -> Void)?
+    var videoSavingStarted: (() -> Void)?
+    var videoSavingEnded: (() -> Void)?
     private var playerViewController: AVPlayerViewController
     public var pickImageButton: Button
     public var imageView: DraggableImageView?
@@ -118,6 +120,8 @@ class SelectedVideoView: UIView {
     }
     
     @objc private func saveButtonTappedAction() {
+        videoSavingStarted?()
+        
         guard let videoAsset = playerViewController.player?.currentItem?.asset as? AVURLAsset else {
             return
         }
@@ -239,7 +243,7 @@ class SelectedVideoView: UIView {
                         PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
                     }) { success, error in
                         guard success else { return }
-                        print("✅ Saved to Photos")
+                        self.videoSavingEnded?()
                     }
             }
         }
@@ -249,6 +253,7 @@ class SelectedVideoView: UIView {
 class SelectedVideoViewController: UIViewController {
     private var selectedVideoView: SelectedVideoView!
     private var imagePicker: MediaPickerController!
+    private var alert = Alert(title: "Saving video...")
     
     var videoURL: URL?
     let playerViewController = AVPlayerViewController()
@@ -285,6 +290,22 @@ class SelectedVideoViewController: UIViewController {
             self?.selectedVideoView.addImage(image: imageURL)
             self?.selectedVideoView.pickImageButton.layer.opacity = 0
             self?.selectedVideoView.addSaveButton()
+        }
+        
+        selectedVideoView.videoSavingStarted = { [weak self] in
+            guard let alert = self?.alert else { return }
+            self?.present(alert, animated: true)
+        }
+        
+        selectedVideoView.videoSavingEnded = { [weak self] in
+            Task {
+                guard let alert = self?.alert else { return }
+                alert.dismiss(animated: true)
+                alert.title = "Video saved"
+                self?.present(alert, animated: true)
+                try await Task.sleep(nanoseconds: 2_000_000_000)
+                alert.dismiss(animated: true)
+            }
         }
     }
 }
