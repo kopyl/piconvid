@@ -193,8 +193,6 @@ class SelectedVideoView: UIView {
               let image = imageView.image else {
             return
         }
-        
-        print(parentLayer.frame.size, videoLayer.frame.size)
 
         let overlayLayer = CALayer()
         overlayLayer.contents = image.cgImage
