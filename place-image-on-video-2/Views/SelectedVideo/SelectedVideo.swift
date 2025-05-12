@@ -64,7 +64,7 @@ class SelectedVideoView: UIView {
     
     init(playerViewController: AVPlayerViewController) {
         self.playerViewController = playerViewController
-        pickImageButton = Button(title: "Select overlay image")
+        pickImageButton = Button(title: "Select overlay image", type: .secondary)
         super.init(frame: .zero)
         setupView()
     }
@@ -109,7 +109,7 @@ class SelectedVideoView: UIView {
     }
     
     public func addSaveButton() {
-        let saveButton = Button(title: "Save video")
+        let saveButton = Button(title: "Save video", type: .secondary)
         saveButton.addTarget(self, action: #selector(saveButtonTappedAction), for: .touchUpInside)
         addSubview(saveButton)
         saveButton.placeAtTheBottom(of: self)
