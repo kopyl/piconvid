@@ -58,6 +58,7 @@ class SelectedVideoView: UIView {
     public var pickImageButton: Button
     public var changeVideoButton: Button
     public var imageView: DraggableImageView?
+    var changeVideoTapped: (() -> Void)?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -82,6 +83,7 @@ class SelectedVideoView: UIView {
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         
         changeVideoButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 29, bottom: 0, right: 29)
+        changeVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         
         let buttonsStack = ButtonStack([changeVideoButton, pickImageButton])
         addSubview(buttonsStack)
@@ -123,6 +125,10 @@ class SelectedVideoView: UIView {
     
     @objc private func pickImageTappedAction() {
         pickImageTapped?()
+    }
+    
+    @objc private func pickVideoTappedAction() {
+        self.changeVideoTapped?()
     }
     
     @objc private func saveButtonTappedAction() {
@@ -260,6 +266,7 @@ class SelectedVideoViewController: UIViewController {
     private var selectedVideoView: SelectedVideoView!
     private var imagePicker: MediaPickerController!
     private var alert = Alert(title: "Saving video...")
+    private var videoPicker: MediaPickerController!
     
     var videoURL: URL?
     let playerViewController = AVPlayerViewController()
@@ -313,5 +320,25 @@ class SelectedVideoViewController: UIViewController {
                 alert.dismiss(animated: true)
             }
         }
+        
+        videoPicker = MediaPickerController(presenter: self)
+        
+        selectedVideoView.changeVideoTapped = { [weak self] in
+            self?.videoPicker.presentMediaPicker(forType: .video)
+        }
+        
+        videoPicker.videoPicked = { [weak self] videoURL in
+            self?.playerViewController.player = AVPlayer(url: videoURL)
+            self?.playerViewController.player?.play()
+        }
     }
+}
+
+#Preview {
+    let videoURL = Bundle.main.url(
+        forResource: DemoAssetsFiles.Video.name,
+        withExtension: DemoAssetsFiles.Video.extension
+    )
+    
+    SelectedVideoViewController(videoURL: videoURL!)
 }
