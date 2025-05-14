@@ -5,6 +5,7 @@ struct Copy {
         static let pickVideo = "Pick Video"
         static let tryDemoVideo = "Try demo video"
         static let selectOverlayImage = "Pick picture overlay"
+        static let changeVideo = "Change video"
     }
 }
 

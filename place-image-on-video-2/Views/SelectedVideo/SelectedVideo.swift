@@ -56,6 +56,7 @@ class SelectedVideoView: UIView {
     var videoSavingEnded: (() -> Void)?
     private var playerViewController: AVPlayerViewController
     public var pickImageButton: Button
+    public var changeVideoButton: Button
     public var imageView: DraggableImageView?
     
     required init?(coder: NSCoder) {
@@ -65,6 +66,7 @@ class SelectedVideoView: UIView {
     init(playerViewController: AVPlayerViewController) {
         self.playerViewController = playerViewController
         pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
+        changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
         super.init(frame: .zero)
         setupView()
     }
@@ -78,8 +80,12 @@ class SelectedVideoView: UIView {
         addSubview(playerViewController.view)
         
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
-        addSubview(pickImageButton)
-        pickImageButton.placeAtTheBottom(of: self)
+        
+        changeVideoButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 29, bottom: 0, right: 29)
+        
+        let buttonsStack = ButtonStack([changeVideoButton, pickImageButton])
+        addSubview(buttonsStack)
+        buttonsStack.placeAtTheBottom(of: self)
         
         NSLayoutConstraint.activate([
             playerViewController.view.centerXAnchor.constraint(equalTo: centerXAnchor),
