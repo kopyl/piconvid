@@ -41,20 +41,24 @@ class Button: UIButton {
     
     private func setup() {
         guard let title else { return }
-        setTitle(title, for: .normal)
+        
+        let attributedString = NSMutableAttributedString(string: title)
+        attributedString.addAttribute(NSAttributedString.Key.kern, value: -0.2, range: NSRange(location: 0, length: attributedString.string.count))
+        setAttributedTitle(attributedString, for: .normal)
         
         var fontSize: CGFloat
         switch type {
         case .primary:
             fontSize = 15
+            backgroundColor = .primaryButtonBackground
         case .secondary:
             fontSize = 13
+            backgroundColor = .secondaryButtonBackground
         }
         titleLabel?.font = UIFont.systemFont(ofSize: fontSize, weight: .medium)
         
         translatesAutoresizingMaskIntoConstraints = false
         setTitleColor(.buttonText, for: .normal)
-        backgroundColor = .primaryButtonBackground
         layer.cornerRadius = 4
         
         guard let imageName = systemImageName else { return }
@@ -64,7 +68,7 @@ class Button: UIButton {
         setImage(image, for: .normal)
         imageView?.tintColor = .buttonText
         
-        let insetAmount: CGFloat = 16
+        let insetAmount: CGFloat = 14
         imageEdgeInsets.right = insetAmount
         titleEdgeInsets.left = insetAmount
     }
