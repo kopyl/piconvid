@@ -64,7 +64,7 @@ class SelectedVideoView: UIView {
     
     init(playerViewController: AVPlayerViewController) {
         self.playerViewController = playerViewController
-        pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary)
+        pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
         super.init(frame: .zero)
         setupView()
     }
