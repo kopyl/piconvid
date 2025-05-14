@@ -55,8 +55,7 @@ class SelectedVideoView: UIView {
     var videoSavingStarted: (() -> Void)?
     var videoSavingEnded: (() -> Void)?
     private var playerViewController: AVPlayerViewController
-    public var pickImageButton: Button
-    public var changeVideoButton: Button
+    public var buttonsStack: ButtonStack
     public var imageView: DraggableImageView?
     var changeVideoTapped: (() -> Void)?
     
@@ -66,8 +65,7 @@ class SelectedVideoView: UIView {
     
     init(playerViewController: AVPlayerViewController) {
         self.playerViewController = playerViewController
-        pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
-        changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
+        buttonsStack = ButtonStack([])
         super.init(frame: .zero)
         setupView()
     }
@@ -80,12 +78,15 @@ class SelectedVideoView: UIView {
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(playerViewController.view)
         
+        let pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
+        let changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
+        
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         
         changeVideoButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 29, bottom: 0, right: 29)
         changeVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         
-        let buttonsStack = ButtonStack([changeVideoButton, pickImageButton])
+        buttonsStack = ButtonStack([changeVideoButton, pickImageButton])
         addSubview(buttonsStack)
         buttonsStack.placeAtTheBottom(of: self)
         
@@ -301,7 +302,7 @@ class SelectedVideoViewController: UIViewController {
         
         imagePicker.imagePicked = { [weak self] imageURL in
             self?.selectedVideoView.addImage(image: imageURL)
-            self?.selectedVideoView.pickImageButton.layer.opacity = 0
+            self?.selectedVideoView.buttonsStack.layer.opacity = 0
             self?.selectedVideoView.addSaveButton()
         }
         
