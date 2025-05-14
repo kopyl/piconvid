@@ -83,7 +83,7 @@ class SelectedVideoView: UIView {
         
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         
-        changeVideoButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 29, bottom: 0, right: 29)
+        changeVideoButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 19, bottom: 0, right: 19)
         changeVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         
         buttonsStack = ButtonStack([changeVideoButton, pickImageButton])

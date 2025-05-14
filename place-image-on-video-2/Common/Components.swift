@@ -79,7 +79,7 @@ class Button: UIButton {
         NSLayoutConstraint.activate([
             centerXAnchor.constraint(equalTo: view.centerXAnchor),
             bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -safeAreaPaddingd.bottom),
-            heightAnchor.constraint(equalToConstant: 70),
+            heightAnchor.constraint(equalToConstant: 60),
             widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20)
         ])
     }
