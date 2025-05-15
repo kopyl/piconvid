@@ -58,6 +58,7 @@ class SelectedVideoView: UIView {
     public var buttonsStack: ButtonStack
     public var imageView: DraggableImageView?
     var changeVideoTapped: (() -> Void)?
+    var mainContentContainer = MainViewContainer()
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -72,11 +73,7 @@ class SelectedVideoView: UIView {
     
     private func setupView() {
         backgroundColor = .appBackground
-        
         guard let videoAspectRatio = getVideoAspectRatio(from: playerViewController) else { return }
-        
-        playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(playerViewController.view)
         
         let changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
         let pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
@@ -89,10 +86,16 @@ class SelectedVideoView: UIView {
         addSubview(buttonsStack)
         buttonsStack.placeAtTheBottom(of: self)
         
+        addSubview(mainContentContainer)
+        mainContentContainer.placeAbove(button: buttonsStack, inside: self)
+        
+        playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        mainContentContainer.addSubview(playerViewController.view)
+        
         NSLayoutConstraint.activate([
-            playerViewController.view.centerXAnchor.constraint(equalTo: centerXAnchor),
-            playerViewController.view.centerYAnchor.constraint(equalTo: centerYAnchor),
-            playerViewController.view.widthAnchor.constraint(equalTo: widthAnchor, constant: -50),
+            playerViewController.view.centerXAnchor.constraint(equalTo: mainContentContainer.centerXAnchor),
+            playerViewController.view.centerYAnchor.constraint(equalTo: mainContentContainer.centerYAnchor),
+            playerViewController.view.widthAnchor.constraint(equalTo: mainContentContainer.widthAnchor),
             playerViewController.view.heightAnchor.constraint(equalTo: playerViewController.view.widthAnchor, multiplier: 1 / videoAspectRatio),
        ])
     }
@@ -104,7 +107,7 @@ class SelectedVideoView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        addSubview(imageView)
+        mainContentContainer.addSubview(imageView)
         
         let imageRatio = imageView.intrinsicContentSize.height / imageView.intrinsicContentSize.width
         
@@ -134,9 +137,7 @@ class SelectedVideoView: UIView {
     @objc private func saveButtonTappedAction() {
         videoSavingStarted?()
         
-        guard let videoAsset = playerViewController.player?.currentItem?.asset as? AVURLAsset else {
-            return
-        }
+        guard let videoAsset = playerViewController.player?.currentItem?.asset as? AVURLAsset else { return }
         
         let mixComposition = AVMutableComposition()
         guard let videoTrack = videoAsset.tracks(withMediaType: .video).first else { return }
@@ -205,8 +206,7 @@ class SelectedVideoView: UIView {
         videoLayer.frame = CGRect(origin: .zero, size: renderSize)
         parentLayer.addSublayer(videoLayer)
         
-        guard let imageView = self.subviews.first(where: { $0 is DraggableImageView }) as? DraggableImageView,
-              let image = imageView.image else {
+        guard let image = imageView.image else {
             return
         }
 
