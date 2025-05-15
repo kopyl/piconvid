@@ -297,6 +297,8 @@ class SelectedVideoViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        navigationItem.hidesBackButton = true
+        
         imagePicker = MediaPickerController(presenter: self)
         
         imagePicker.imagePicked = { [weak self] imageURL in
