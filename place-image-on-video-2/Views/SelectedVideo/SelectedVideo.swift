@@ -80,6 +80,7 @@ class SelectedVideoView: UIView {
         
         let changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
         let pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
+        changeVideoButton.setContentHuggingPriority(.required, for: .horizontal)
         
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         changeVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
