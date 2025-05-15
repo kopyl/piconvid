@@ -58,7 +58,7 @@ class SelectedVideoView: UIView {
     public var buttonsStack: ButtonStack
     public var imageView: DraggableImageView?
     var changeVideoTapped: (() -> Void)?
-    var mainContentContainer = MainViewContainer()
+    var mainContentContainer = MainContentContainer()
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

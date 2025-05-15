@@ -36,28 +36,3 @@ class HeroTitle: UILabel {
         ])
     }
 }
-
-class MainViewContainer: UIView {
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setup()
-    }
-    init() {
-        super.init(frame: .zero)
-        setup()
-    }
-    func setup() {
-        backgroundColor = .heroContainerBackground
-        translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = 4
-        layer.masksToBounds = true
-    }
-    public func placeAbove(button: UIView, inside: UIView) {
-        NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: inside.topAnchor, constant: getSafeAreaPadding().top),
-            bottomAnchor.constraint(equalTo: button.topAnchor, constant: -10),
-            leadingAnchor.constraint(equalTo: inside.leadingAnchor, constant: 10),
-            trailingAnchor.constraint(equalTo: inside.trailingAnchor, constant: -10)
-        ])
-    }
-}

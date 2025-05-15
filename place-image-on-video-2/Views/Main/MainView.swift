@@ -19,7 +19,7 @@ class MainView: UIView {
         addSubview(pickVideoButton)
         pickVideoButton.placeAtTheBottom(of: self)
         
-        let mainContentContainer = MainViewContainer()
+        let mainContentContainer = MainContentContainer()
         addSubview(mainContentContainer)
         mainContentContainer.placeAbove(button: pickVideoButton, inside: self)
         

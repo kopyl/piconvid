@@ -87,37 +87,6 @@ class Button: UIButton {
     }
 }
 
-class ButtonStack: UIStackView {
-    
-    init(_ arrangedSubviews: [UIView]) {
-        super.init(frame: .zero)
-        for arrangedSubview in arrangedSubviews {
-            addArrangedSubview(arrangedSubview)
-        }
-        setup()
-    }
-    
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setup() {
-        spacing = 5
-        translatesAutoresizingMaskIntoConstraints = false
-    }
-    
-    public func placeAtTheBottom(of view: UIView) {
-        let safeAreaPaddingd = getSafeAreaPadding()
-        
-        NSLayoutConstraint.activate([
-            centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -safeAreaPaddingd.bottom),
-            heightAnchor.constraint(equalToConstant: 70),
-            widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20)
-        ])
-    }
-}
-
 class PillButton: UIButton {
     var title: String?
     
@@ -164,13 +133,27 @@ class PillButton: UIButton {
     }
 }
 
-class Alert: UIAlertController {
+class MainContentContainer: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        setup()
     }
-    
-    init(title: String) {
-        super.init(nibName: nil, bundle: nil)
-        self.title = title
+    init() {
+        super.init(frame: .zero)
+        setup()
+    }
+    func setup() {
+        backgroundColor = .heroContainerBackground
+        translatesAutoresizingMaskIntoConstraints = false
+        layer.cornerRadius = 4
+        layer.masksToBounds = true
+    }
+    public func placeAbove(button: UIView, inside: UIView) {
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: inside.topAnchor, constant: getSafeAreaPadding().top),
+            bottomAnchor.constraint(equalTo: button.topAnchor, constant: -10),
+            leadingAnchor.constraint(equalTo: inside.leadingAnchor, constant: 10),
+            trailingAnchor.constraint(equalTo: inside.trailingAnchor, constant: -10)
+        ])
     }
 }
