@@ -78,8 +78,8 @@ class SelectedVideoView: UIView {
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(playerViewController.view)
         
-        let pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
         let changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
+        let pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
         
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         changeVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
