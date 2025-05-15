@@ -61,6 +61,8 @@ class Button: UIButton {
         setTitleColor(.buttonText, for: .normal)
         layer.cornerRadius = 4
         
+        contentEdgeInsets = UIEdgeInsets(top: 0, left: 19, bottom: 0, right: 19)
+        
         guard let imageName = systemImageName else { return }
         let image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: fontSize)))
         guard let image else { return }
