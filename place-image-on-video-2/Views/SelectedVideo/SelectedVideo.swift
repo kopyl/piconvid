@@ -14,30 +14,30 @@ func getVideoAspectRatio(from playerViewController: AVPlayerViewController) -> C
 class DraggableImageView: UIImageView {
     private var initialTouchPoint: CGPoint = .zero
     private var playerViewController: AVPlayerViewController?
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     init(playerViewController: AVPlayerViewController) {
         super.init(frame: .zero)
         isUserInteractionEnabled = true
         self.playerViewController = playerViewController
     }
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         initialTouchPoint = touch.location(in: self)
     }
-
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first,
               let superview = self.superview else { return }
-
+        
         let locationInSuperview = touch.location(in: superview)
         var centerY: CGFloat = 0
         centerY = locationInSuperview.y - initialTouchPoint.y + self.bounds.size.height / 2
-
+        
         let bottomLimit = playerViewController?.view.frame.minY ?? 0
         let topLimit = playerViewController?.view.frame.maxY ?? 0
         if centerY < bottomLimit + self.bounds.size.height / 2 {
@@ -74,7 +74,7 @@ class SelectedVideoView: UIView {
     private func setupView() {
         backgroundColor = .appBackground
         guard let videoAspectRatio = getVideoAspectRatio(from: playerViewController) else { return }
-
+        
         let changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
         let pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
         changeVideoButton.setContentHuggingPriority(.required, for: .horizontal)
@@ -93,16 +93,16 @@ class SelectedVideoView: UIView {
         mainContentContainer.addSubview(playerViewController.view)
         
         guard let videoAspectRatio = getVideoAspectRatio(from: playerViewController) else { return }
-
+        
         NSLayoutConstraint.activate([
             playerViewController.view.centerXAnchor.constraint(equalTo: mainContentContainer.centerXAnchor),
             playerViewController.view.centerYAnchor.constraint(equalTo: mainContentContainer.centerYAnchor),
             playerViewController.view.widthAnchor.constraint(equalTo: mainContentContainer.widthAnchor),
        ])
-
+        
         DispatchQueue.main.async {
             let containerAspectRatio = self.mainContentContainer.frame.width / self.mainContentContainer.frame.height
-
+            
             NSLayoutConstraint.activate([
                 self.playerViewController.view.heightAnchor.constraint(
                     equalTo: self.playerViewController.view.widthAnchor,
@@ -123,12 +123,12 @@ class SelectedVideoView: UIView {
         
         let videoAR = getVideoAspectRatio(from: playerViewController)
         let imageAR = imageView.intrinsicContentSize.height / imageView.intrinsicContentSize.width
-
+        
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalTo: playerViewController.view.heightAnchor, multiplier: videoAR ?? 0),
-
+            
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: imageAR),
-
+            
             imageView.centerXAnchor.constraint(equalTo: playerViewController.view.centerXAnchor),
             imageView.bottomAnchor.constraint(equalTo: playerViewController.view.bottomAnchor)
         ])
