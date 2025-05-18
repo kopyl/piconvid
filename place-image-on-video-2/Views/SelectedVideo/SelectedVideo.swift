@@ -114,7 +114,6 @@ class SelectedVideoView: UIView {
     }
     
     @objc private func tryDemoPictureTappedAction() {
-//        demoVideoPicked?()
         print("try demo picture tapped")
     }
     
