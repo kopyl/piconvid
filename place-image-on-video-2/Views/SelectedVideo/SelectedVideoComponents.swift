@@ -1,5 +1,6 @@
 import UIKit
 import AVKit
+import CoreHaptics
 import Lottie
 
 class AllButtonStackContainer: UIView {
@@ -235,6 +236,7 @@ class ProgressLabel: UILabel {
 
 class ConfettiAnimationView: LottieAnimationView {
     private var name: String
+    var hapticEngine: CHHapticEngine?
     
     init(name: String) {
         self.name = name
@@ -276,10 +278,39 @@ class ConfettiAnimationView: LottieAnimationView {
     
     public func shoot(inside view: SelectedVideoView) {
         isHidden = false
+        
+        generateHapticPattern()
+        
         play() { [weak self, weak view] _ in
             guard let v = view else { return }
             self?.remove(from: v)
             v.addLottieAnimation()
+        }
+    }
+    
+    func generateHapticPattern() {
+        do {
+            if hapticEngine == nil {
+                hapticEngine = try CHHapticEngine()
+            }
+            try hapticEngine?.start()
+
+            var events = [CHHapticEvent]()
+            for i in 0..<20 { /// 20 pulses
+                let time = Double(i) * 0.025 /// 25ms between pulses
+                let event = CHHapticEvent(eventType: .hapticTransient, parameters: [
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: 1.0),
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0)
+                ], relativeTime: time)
+                events.append(event)
+            }
+
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try hapticEngine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+
+        } catch {
+            print("Haptic pattern failed: \(error)")
         }
     }
 }
