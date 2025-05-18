@@ -180,11 +180,49 @@ class Hint: UIStackView {
         ])
     }
     
+    public func placeOnTheLeft(of view: UIView) {
+        NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
     public func addTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hintTapped))
         self.addGestureRecognizer(tapGesture)
     }
     @objc private func hintTapped() {
         onHintTapped?()
+    }
+}
+
+class ProgressLabel: UILabel {
+    var progress: Float = 0.0 {
+        didSet {
+            self.text = "\(Int(progress * 100))%"
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setup() {
+        translatesAutoresizingMaskIntoConstraints = false
+        textAlignment = .right
+        font = .systemFont(ofSize: 13)
+        layer.opacity = 0.8
+    }
+
+    public func placeOnTheRight(of view: UIView) {
+        NSLayoutConstraint.activate([
+            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 }

@@ -31,6 +31,9 @@ class SelectedVideoView: UIView {
     private let dragHint = Hint(title: Copy.Hints.drag, icon: "arrow.up.and.down")
     private var savingHint: Hint?
     private var successHint: Hint?
+    private var progressLabel: ProgressLabel?
+    
+    private var exportProgressTimer: Timer?
     
     private var dragHintHidingTask: Task<(), Never>?
     public var isVideoSaving = false
@@ -71,6 +74,18 @@ class SelectedVideoView: UIView {
         dragHint.onHintTapped = { [weak self] in
             self?.dragHintHidingTask?.cancel()
         }
+    }
+    
+    private func addProgressLabel() {
+        progressLabel = ProgressLabel()
+        allButtonStackContainer.addSubview(progressLabel!)
+        progressLabel?.placeOnTheRight(of: allButtonStackContainer)
+    }
+    
+    func removeProgressLabel() {
+        exportProgressTimer?.invalidate()
+        exportProgressTimer = nil
+        progressLabel?.removeFromSuperview()
     }
     
     private func addVideo() {
@@ -227,7 +242,8 @@ class SelectedVideoView: UIView {
         } completion: { _ in
             self.savingHint = Hint(title: Copy.Hints.saving, icon: "arrow.down")
             self.allButtonStackContainer.addSubview(self.savingHint!)
-            self.savingHint?.placeInTheCenter(of: self.allButtonStackContainer)
+            self.savingHint?.placeOnTheLeft(of: self.allButtonStackContainer)
+            self.addProgressLabel()
             self.finalButtonStack.removeFromSuperview()
             self.layoutIfNeeded()
             
@@ -256,6 +272,7 @@ class SelectedVideoView: UIView {
                 self.successHint?.removeFromSuperview()
                 self.successHint = nil
                 self.addFinalButtonStack()
+                self.removeProgressLabel()
                 self.layoutIfNeeded()
                 
                 UIView.animate(withDuration: 0.2) {
@@ -273,6 +290,8 @@ class SelectedVideoView: UIView {
                 self.layoutIfNeeded()
             } completion: { _ in
                 self.savingHint?.removeFromSuperview()
+                self.progressLabel?.removeFromSuperview()
+                self.progressLabel = nil
                 self.savingHint = nil
                 self.showSuccessNotification()
                 self.layoutIfNeeded()
@@ -413,9 +432,17 @@ class SelectedVideoView: UIView {
         exporter.outputFileType = .mov
         exporter.videoComposition = videoComposition
         
+        exportProgressTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            self?.progressLabel?.progress = exporter.progress
+        }
+        
         exporter.exportAsynchronously {
             DispatchQueue.main.async {
+                self.exportProgressTimer?.invalidate()
+                self.exportProgressTimer = nil
+
                 guard exporter.status == .completed else { return }
+
                 PHPhotoLibrary.shared().performChanges({
                     PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
                 }) { success, error in
