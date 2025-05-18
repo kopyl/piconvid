@@ -46,7 +46,7 @@ class ButtonStack: UIStackView {
         translatesAutoresizingMaskIntoConstraints = false
     }
     
-    public func placeInTheCenter(of view: UIView) {        
+    public func placeInTheCenter(of view: UIView) {
         NSLayoutConstraint.activate([
             centerXAnchor.constraint(equalTo: view.centerXAnchor),
             centerYAnchor.constraint(equalTo: view.centerYAnchor),
