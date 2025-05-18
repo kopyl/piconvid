@@ -17,7 +17,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		48BE1E932DCD903200AD6152 /* Exceptions for "place-image-on-video-2" folder in "Piconvid" target */ = {
+		48750A532DDA65A10036645A /* Exceptions for "Piconvid" folder in "Piconvid" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -27,12 +27,12 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		48BE1E832DCD903000AD6152 /* place-image-on-video-2 */ = {
+		48BE1E832DCD903000AD6152 /* Piconvid */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				48BE1E932DCD903200AD6152 /* Exceptions for "place-image-on-video-2" folder in "Piconvid" target */,
+				48750A532DDA65A10036645A /* Exceptions for "Piconvid" folder in "Piconvid" target */,
 			);
-			path = "place-image-on-video-2";
+			path = Piconvid;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -53,7 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				4862F5DD2DD95A5C00E6CE9E /* Previews.swift */,
-				48BE1E832DCD903000AD6152 /* place-image-on-video-2 */,
+				48BE1E832DCD903000AD6152 /* Piconvid */,
 				48BE1E822DCD903000AD6152 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -82,13 +82,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				48BE1E832DCD903000AD6152 /* place-image-on-video-2 */,
+				48BE1E832DCD903000AD6152 /* Piconvid */,
 			);
 			name = Piconvid;
 			packageProductDependencies = (
 				486B8FAA2DD9E43700D89EF8 /* Lottie */,
 			);
-			productName = "place-image-on-video-2";
+			productName = Piconvid;
 			productReference = 48BE1E812DCD903000AD6152 /* Piconvid.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -160,7 +160,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9QNMAN8CT6;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "place-image-on-video-2/Info.plist";
+				INFOPLIST_FILE = Piconvid/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to select a video from your photo library which we later place a picture on.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -190,7 +190,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9QNMAN8CT6;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "place-image-on-video-2/Info.plist";
+				INFOPLIST_FILE = Piconvid/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to select a video from your photo library which we later place a picture on.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
