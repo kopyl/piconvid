@@ -116,7 +116,12 @@ class SelectedVideoView: UIView {
     }
     
     @objc private func tryDemoPictureTappedAction() {
-        print("try demo picture tapped")
+        if imageView != nil { return }
+        let imageURL = Bundle.main.url(forResource: "comment-demo-picture", withExtension: "png")!
+        addImage(image: imageURL)
+        buttonsStack.layer.opacity = 0
+        addSaveButton()
+        pillButton.removeFromSuperview()
     }
     
     @objc private func pickImageTappedAction() {
