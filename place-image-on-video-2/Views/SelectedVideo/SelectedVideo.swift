@@ -115,13 +115,17 @@ class SelectedVideoView: UIView {
         saveButton.placeAtTheBottom(of: self)
     }
     
+    public func removePillButton() {
+        pillButton.removeFromSuperview()
+    }
+    
     @objc private func tryDemoPictureTappedAction() {
         if imageView != nil { return }
         let imageURL = Bundle.main.url(forResource: "comment-demo-picture", withExtension: "png")!
         addImage(image: imageURL)
         buttonsStack.layer.opacity = 0
         addSaveButton()
-        pillButton.removeFromSuperview()
+        removePillButton()
     }
     
     @objc private func pickImageTappedAction() {
@@ -305,6 +309,7 @@ class SelectedVideoViewController: UIViewController {
             self?.selectedVideoView.addImage(image: imageURL)
             self?.selectedVideoView.buttonsStack.layer.opacity = 0
             self?.selectedVideoView.addSaveButton()
+            self?.selectedVideoView.removePillButton()
         }
         
         selectedVideoView.videoSavingStarted = { [weak self] in
