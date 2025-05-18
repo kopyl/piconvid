@@ -42,9 +42,15 @@ class Button: UIButton {
     private func setup() {
         guard let title else { return }
         
-        let attributedString = NSMutableAttributedString(string: title)
-        attributedString.addAttribute(NSAttributedString.Key.kern, value: -0.2, range: NSRange(location: 0, length: attributedString.string.count))
-        setAttributedTitle(attributedString, for: .normal)
+        let attributedStringNormal = NSMutableAttributedString(string: title)
+        attributedStringNormal.addAttribute(.kern, value: -0.2, range: NSRange(location: 0, length: title.count))
+        attributedStringNormal.addAttribute(.foregroundColor, value: UIColor.buttonText, range: NSRange(location: 0, length: title.count))
+        setAttributedTitle(attributedStringNormal, for: .normal)
+
+        let attributedStringHighlighted = NSMutableAttributedString(string: title)
+        attributedStringHighlighted.addAttribute(.kern, value: -0.2, range: NSRange(location: 0, length: title.count))
+        attributedStringHighlighted.addAttribute(.foregroundColor, value: UIColor.buttonText.withAlphaComponent(0.5), range: NSRange(location: 0, length: title.count))
+        setAttributedTitle(attributedStringHighlighted, for: .highlighted)
         
         var fontSize: CGFloat
         switch type {
@@ -122,6 +128,7 @@ class PillButton: UIButton {
         titleLabel?.font = UIFont.systemFont(ofSize: 13)
         translatesAutoresizingMaskIntoConstraints = false
         setTitleColor(.buttonText, for: .normal)
+        setTitleColor(.buttonText.withAlphaComponent(0.5), for: .highlighted)
         contentEdgeInsets = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
     }
 
