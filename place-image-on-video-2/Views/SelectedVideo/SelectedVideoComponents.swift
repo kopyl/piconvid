@@ -1,6 +1,28 @@
 import UIKit
 import AVKit
 
+class AllButtonStackContainer: UIView {
+    init() {
+        super.init(frame: .zero)
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func placeAtTheBottom(of view: UIView) {
+        let safeAreaPaddingd = getSafeAreaPadding()
+        
+        NSLayoutConstraint.activate([
+            centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -safeAreaPaddingd.bottom),
+            heightAnchor.constraint(equalToConstant: 70),
+            widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20)
+        ])
+    }
+}
+
 class ButtonStack: UIStackView {
     
     init(_ arrangedSubviews: [UIView]) {
@@ -20,14 +42,12 @@ class ButtonStack: UIStackView {
         translatesAutoresizingMaskIntoConstraints = false
     }
     
-    public func placeAtTheBottom(of view: UIView) {
-        let safeAreaPaddingd = getSafeAreaPadding()
-        
+    public func placeInTheCenter(of view: UIView) {        
         NSLayoutConstraint.activate([
             centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -safeAreaPaddingd.bottom),
-            heightAnchor.constraint(equalToConstant: 70),
-            widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20)
+            centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            heightAnchor.constraint(equalTo: view.heightAnchor),
+            widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
     }
 }

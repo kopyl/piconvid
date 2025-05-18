@@ -22,6 +22,7 @@ class SelectedVideoView: UIView {
     private var playerViewController: AVPlayerViewController
     public var initButtonStack = ButtonStack([])
     public var finalButtonStack = ButtonStack([])
+    public var allButtonStackContainer = AllButtonStackContainer()
     public var imageView: DraggableImageView?
     var mainContentContainer = MainContentContainer()
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
@@ -46,12 +47,15 @@ class SelectedVideoView: UIView {
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         changeVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         
+        addSubview(allButtonStackContainer)
+        allButtonStackContainer.placeAtTheBottom(of: self)
+        
         initButtonStack = ButtonStack([changeVideoButton, pickImageButton])
-        addSubview(initButtonStack)
-        initButtonStack.placeAtTheBottom(of: self)
+        allButtonStackContainer.addSubview(initButtonStack)
+        initButtonStack.placeInTheCenter(of: allButtonStackContainer)
         
         addSubview(mainContentContainer)
-        mainContentContainer.placeAbove(button: initButtonStack, inside: self)
+        mainContentContainer.placeAbove(button: allButtonStackContainer, inside: self)
         
         addVideo()
         addPillButton()
@@ -117,10 +121,9 @@ class SelectedVideoView: UIView {
         startOverButton.addTarget(self, action: #selector(startOverButtonTappedAction), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTappedAction), for: .touchUpInside)
         
-        
         finalButtonStack = ButtonStack([startOverButton, saveButton])
-        addSubview(finalButtonStack)
-        finalButtonStack.placeAtTheBottom(of: self)
+        allButtonStackContainer.addSubview(finalButtonStack)
+        finalButtonStack.placeInTheCenter(of: allButtonStackContainer)
     }
     
     public func removePillButton() {
