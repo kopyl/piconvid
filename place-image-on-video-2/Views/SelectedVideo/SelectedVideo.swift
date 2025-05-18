@@ -328,6 +328,12 @@ class SelectedVideoView: UIView {
     }
     
     @objc private func saveButtonTappedAction() {
+        if imageView?.isImageHigherThanPlayerView() == true {
+            /// Otherwise if an image is larger, the video will be black.
+            /// Needs a fix, if i want to allow users to save videos with an image higher than a video
+            return
+        }
+        
         isVideoSaving = true
         imageView?.isDraggingDisabled = true
         showSavingIndicator()

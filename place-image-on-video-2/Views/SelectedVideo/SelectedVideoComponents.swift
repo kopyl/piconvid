@@ -114,7 +114,7 @@ class DraggableImageView: UIImageView {
         self.center.y = centerY
     }
 
-    private func isImageHigherThanPlayerView() -> Bool {
+    public func isImageHigherThanPlayerView() -> Bool {
         guard let playerView = playerViewController?.view else { return false }
         return self.frame.minY < playerView.frame.minY
     }
