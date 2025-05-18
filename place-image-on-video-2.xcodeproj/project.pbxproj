@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4862F5DE2DD95A5F00E6CE9E /* Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4862F5DD2DD95A5C00E6CE9E /* Previews.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		4862F5DD2DD95A5C00E6CE9E /* Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Previews.swift; sourceTree = "<group>"; };
 		48BE1E812DCD903000AD6152 /* place-image-on-video-2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "place-image-on-video-2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -45,6 +50,7 @@
 		48BE1E782DCD903000AD6152 = {
 			isa = PBXGroup;
 			children = (
+				4862F5DD2DD95A5C00E6CE9E /* Previews.swift */,
 				48BE1E832DCD903000AD6152 /* place-image-on-video-2 */,
 				48BE1E822DCD903000AD6152 /* Products */,
 			);
@@ -132,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4862F5DE2DD95A5F00E6CE9E /* Previews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
