@@ -20,11 +20,14 @@ class SelectedVideoView: UIView {
     var startOverButtonTapped: (() -> Void)?
     
     private var playerViewController: AVPlayerViewController
+    
     public var initButtonStack = ButtonStack([])
     public var finalButtonStack = ButtonStack([])
+    
     public var allButtonStackContainer = AllButtonStackContainer()
-    public var imageView: DraggableImageView?
     var mainContentContainer = MainContentContainer()
+    
+    public var imageView: DraggableImageView?
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
     
     required init?(coder: NSCoder) {
