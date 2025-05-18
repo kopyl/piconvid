@@ -10,6 +10,10 @@ struct Copy {
         static let saveVideo = "Save video"
         static let startOver = "Start over"
     }
+    
+    class Hints {
+        static let drag = "You can drag an image overlay vertically"
+    }
 }
 
 struct IconNames {

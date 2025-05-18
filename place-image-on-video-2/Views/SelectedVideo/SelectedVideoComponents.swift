@@ -101,3 +101,44 @@ class DraggableImageView: UIImageView {
         self.center.y = centerY
     }
 }
+
+class Hint: UIStackView {
+    var title: String?
+    var systemImageName: String
+    
+    init(title: String, icon systemImageName: String) {
+        self.title = title
+        self.systemImageName = systemImageName
+        super.init(frame: .zero)
+        setup()
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setup() {
+        spacing = 14
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        let labelView = UILabel()
+        labelView.text = title
+        labelView.font = .systemFont(ofSize: 13)
+        labelView.layer.opacity = 0.8
+        
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: systemImageName)
+        imageView.tintColor = .white
+        imageView.layer.opacity = 0.8
+        
+        addArrangedSubview(imageView)
+        addArrangedSubview(labelView)
+    }
+    
+    public func placeInTheCenter(of view: UIView) {
+        NSLayoutConstraint.activate([
+            centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+}
