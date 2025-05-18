@@ -167,6 +167,7 @@ class SelectedVideoView: UIView {
             UIView.animate(withDuration: 0.2) {
                 self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
                 self.layoutIfNeeded()
+                self.dragHint.shakeIcon()
             } completion: { _ in
                 self.hideDragHint(after: 1_300_000_000)
                 self.layoutIfNeeded()
