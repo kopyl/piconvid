@@ -14,6 +14,7 @@ func getVideoAspectRatio(from playerViewController: AVPlayerViewController) -> C
 class SelectedVideoView: UIView {
     
     var pickImageTapped: (() -> Void)?
+    var pickDemoImageTapped: (() -> Void)?
     var changeVideoTapped: (() -> Void)?
     var startOverButtonTapped: (() -> Void)?
     
@@ -281,11 +282,7 @@ class SelectedVideoView: UIView {
     
     @objc private func tryDemoPictureTappedAction() {
         if imageView != nil { return }
-        
-        let imageURL = Bundle.main.url(forResource: "comment-demo-picture", withExtension: "png")!
-        showSecondStageBottomButtons()
-        addImage(image: imageURL)
-        removePillButton()
+        pickDemoImageTapped?()
     }
     
     @objc private func pickImageTappedAction() {
@@ -471,9 +468,12 @@ class SelectedVideoViewController: UIViewController {
         imagePicker = MediaPickerController(presenter: self)
         
         imagePicker.imagePicked = { [weak self] imageURL in
-            self?.selectedVideoView.addImage(image: imageURL)
-            self?.selectedVideoView.showSecondStageBottomButtons()
-            self?.selectedVideoView.removePillButton()
+            self?.moveToVideoEditor(imageURL: imageURL)
+        }
+        
+        selectedVideoView.pickDemoImageTapped = { [weak self] in
+            let demoImageURL = Bundle.main.url(forResource: "comment-demo-picture", withExtension: "png")!
+            self?.moveToVideoEditor(imageURL: demoImageURL)
         }
         
         videoPicker = MediaPickerController(presenter: self)
@@ -490,5 +490,11 @@ class SelectedVideoViewController: UIViewController {
             self?.playerViewController.player = AVPlayer(url: videoURL)
             self?.playerViewController.player?.play()
         }
+    }
+    
+    private func moveToVideoEditor(imageURL: URL) {
+        selectedVideoView.addImage(image: imageURL)
+        selectedVideoView.showSecondStageBottomButtons()
+        selectedVideoView.removePillButton()
     }
 }
