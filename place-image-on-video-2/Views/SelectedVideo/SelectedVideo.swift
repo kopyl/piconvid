@@ -33,6 +33,7 @@ class SelectedVideoView: UIView {
     private let dragHint = Hint(title: Copy.Hints.drag, icon: "arrow.up.and.down")
     private var savingHint: Hint?
     private var successHint: Hint?
+    private var notSupportedHint: Hint?
     
     private var progressLabel: ProgressLabel?
     private var exportProgressTimer: Timer?
@@ -312,6 +313,39 @@ class SelectedVideoView: UIView {
         }
     }
     
+    private func notifyUserAboutNotSupportedImage() {
+        UIView.animate(withDuration: 0.2) {
+            self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
+            self.layoutIfNeeded()
+        }  completion: { _ in
+            self.notSupportedHint = Hint(title: Copy.Hints.notSupported, icon: "xmark")
+            self.allButtonStackContainer.addSubview(self.notSupportedHint!)
+            self.notSupportedHint?.placeInTheCenter(of: self.allButtonStackContainer)
+            self.finalButtonStack.removeFromSuperview()
+            self.layoutIfNeeded()
+            
+            UIView.animate(withDuration: 0.2) {
+                self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
+                self.layoutIfNeeded()
+            } completion: { _ in
+                UIView.animate(withDuration: 0.2, delay: 2) {
+                    self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
+                    self.layoutIfNeeded()
+                } completion: { _ in
+                    self.addFinalButtonStack()
+                    self.notSupportedHint?.removeFromSuperview()
+                    self.layoutIfNeeded()
+                    
+                    UIView.animate(withDuration: 0.2) {
+                        self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
+                        self.layoutIfNeeded()
+                    }
+                }
+            }
+        }
+        
+    }
+    
     @objc private func tryDemoPictureTappedAction() {
         if imageView != nil { return }
         pickDemoImageTapped?()
@@ -333,6 +367,7 @@ class SelectedVideoView: UIView {
         if imageView?.isHigherThanVideo() == true {
             /// Otherwise if an image is larger, the video will be black.
             /// Needs a fix, if i want to allow users to save videos with an image higher than a video
+            notifyUserAboutNotSupportedImage()
             return
         }
         

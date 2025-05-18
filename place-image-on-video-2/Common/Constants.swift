@@ -25,6 +25,7 @@ struct Copy {
         static let drag = "You can drag an image overlay vertically"
         static let saving = "Saving"
         static let success = "Video saved to Photos"
+        static let notSupported = "Image must have smaller height than video"
     }
 }
 
