@@ -11,45 +11,6 @@ func getVideoAspectRatio(from playerViewController: AVPlayerViewController) -> C
     return size.width / size.height
 }
 
-class DraggableImageView: UIImageView {
-    private var initialTouchPoint: CGPoint = .zero
-    private var playerViewController: AVPlayerViewController?
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    init(playerViewController: AVPlayerViewController) {
-        super.init(frame: .zero)
-        isUserInteractionEnabled = true
-        self.playerViewController = playerViewController
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        initialTouchPoint = touch.location(in: self)
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first,
-              let superview = self.superview else { return }
-        
-        let locationInSuperview = touch.location(in: superview)
-        var centerY: CGFloat = 0
-        centerY = locationInSuperview.y - initialTouchPoint.y + self.bounds.size.height / 2
-        
-        let bottomLimit = playerViewController?.view.frame.minY ?? 0
-        let topLimit = playerViewController?.view.frame.maxY ?? 0
-        if centerY < bottomLimit + self.bounds.size.height / 2 {
-            centerY = bottomLimit + self.bounds.size.height / 2
-        } else if centerY > topLimit - self.bounds.size.height / 2 {
-            centerY = topLimit - self.bounds.size.height / 2
-        }
-        
-        self.center.y = centerY
-    }
-}
-
 class SelectedVideoView: UIView {
     var pickImageTapped: (() -> Void)?
     var videoSavingStarted: (() -> Void)?
