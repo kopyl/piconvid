@@ -4,6 +4,7 @@ struct Copy {
     class Buttons {
         static let pickVideo = "Pick Video"
         static let tryDemoVideo = "Try demo video"
+        static let tryDemoPicture = "Try demo picture"
         static let selectOverlayImage = "Pick picture overlay"
         static let changeVideo = "Change video"
     }

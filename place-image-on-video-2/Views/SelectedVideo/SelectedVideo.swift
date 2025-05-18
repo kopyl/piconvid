@@ -50,6 +50,14 @@ class SelectedVideoView: UIView {
         mainContentContainer.placeAbove(button: buttonsStack, inside: self)
         
         addViedeo()
+        addPillButton()
+    }
+    
+    private func addPillButton() {
+        let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
+        pillButton.addTarget(self, action: #selector(tryDemoPictureTappedAction), for: .touchUpInside)
+        mainContentContainer.addSubview(pillButton)
+        pillButton.placeAtTheTop(of: mainContentContainer)
     }
     
     private func addViedeo() {
@@ -103,6 +111,11 @@ class SelectedVideoView: UIView {
         saveButton.addTarget(self, action: #selector(saveButtonTappedAction), for: .touchUpInside)
         addSubview(saveButton)
         saveButton.placeAtTheBottom(of: self)
+    }
+    
+    @objc private func tryDemoPictureTappedAction() {
+//        demoVideoPicked?()
+        print("try demo picture tapped")
     }
     
     @objc private func pickImageTappedAction() {
