@@ -97,6 +97,8 @@ class DraggableImageView: UIImageView {
         guard let touch = touches.first,
               let superview = self.superview else { return }
         
+        guard !isImageHigherThanPlayerView() else { return }
+        
         let locationInSuperview = touch.location(in: superview)
         var centerY: CGFloat = 0
         centerY = locationInSuperview.y - initialTouchPoint.y + self.bounds.size.height / 2
@@ -110,6 +112,11 @@ class DraggableImageView: UIImageView {
         }
         
         self.center.y = centerY
+    }
+
+    private func isImageHigherThanPlayerView() -> Bool {
+        guard let playerView = playerViewController?.view else { return false }
+        return self.frame.minY < playerView.frame.minY
     }
 }
 
