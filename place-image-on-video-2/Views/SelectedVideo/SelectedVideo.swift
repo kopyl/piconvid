@@ -318,6 +318,7 @@ class SelectedVideoView: UIView {
     
     @objc private func saveButtonTappedAction() {
         isVideoSaving = true
+        imageView?.isDraggingDisabled = true
         showSavingIndicator()
         
         guard let videoAsset = playerViewController.player?.currentItem?.asset as? AVURLAsset else { return }
@@ -449,6 +450,7 @@ class SelectedVideoView: UIView {
                     guard success else { return }
                     self.notifyUserAboutSuccessSaving()
                     self.isVideoSaving = false
+                    imageView.isDraggingDisabled = false
                 }
             }
         }

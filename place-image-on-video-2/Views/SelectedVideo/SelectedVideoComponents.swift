@@ -70,6 +70,11 @@ class Alert: UIAlertController {
 class DraggableImageView: UIImageView {
     private var initialTouchPoint: CGPoint = .zero
     private var playerViewController: AVPlayerViewController?
+    public var isDraggingDisabled: Bool = false {
+        didSet {
+            isUserInteractionEnabled = !isDraggingDisabled
+        }
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
