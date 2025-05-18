@@ -74,7 +74,7 @@ class SelectedVideoView: UIView {
     private func setupView() {
         backgroundColor = .appBackground
         guard let videoAspectRatio = getVideoAspectRatio(from: playerViewController) else { return }
-        
+
         let changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
         let pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
         changeVideoButton.setContentHuggingPriority(.required, for: .horizontal)
@@ -92,12 +92,24 @@ class SelectedVideoView: UIView {
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         mainContentContainer.addSubview(playerViewController.view)
         
+        guard let videoAspectRatio = getVideoAspectRatio(from: playerViewController) else { return }
+
         NSLayoutConstraint.activate([
             playerViewController.view.centerXAnchor.constraint(equalTo: mainContentContainer.centerXAnchor),
             playerViewController.view.centerYAnchor.constraint(equalTo: mainContentContainer.centerYAnchor),
             playerViewController.view.widthAnchor.constraint(equalTo: mainContentContainer.widthAnchor),
-            playerViewController.view.heightAnchor.constraint(equalTo: playerViewController.view.widthAnchor, multiplier: 1 / videoAspectRatio),
        ])
+
+        DispatchQueue.main.async {
+            let containerAspectRatio = self.mainContentContainer.frame.width / self.mainContentContainer.frame.height
+
+            NSLayoutConstraint.activate([
+                self.playerViewController.view.heightAnchor.constraint(
+                    equalTo: self.playerViewController.view.widthAnchor,
+                    multiplier: 1 / max(videoAspectRatio, containerAspectRatio)
+                )
+            ])
+        }
     }
     
     public func addImage(image: URL) {
@@ -109,13 +121,16 @@ class SelectedVideoView: UIView {
         
         mainContentContainer.addSubview(imageView)
         
-        let imageRatio = imageView.intrinsicContentSize.height / imageView.intrinsicContentSize.width
-        
+        let videoAR = getVideoAspectRatio(from: playerViewController)
+        let imageAR = imageView.intrinsicContentSize.height / imageView.intrinsicContentSize.width
+
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalTo: playerViewController.view.widthAnchor),
+            imageView.widthAnchor.constraint(equalTo: playerViewController.view.heightAnchor, multiplier: videoAR ?? 0),
+
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: imageAR),
+
             imageView.centerXAnchor.constraint(equalTo: playerViewController.view.centerXAnchor),
-            imageView.bottomAnchor.constraint(equalTo: playerViewController.view.bottomAnchor),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: imageRatio),
+            imageView.bottomAnchor.constraint(equalTo: playerViewController.view.bottomAnchor)
         ])
     }
     
@@ -291,7 +306,7 @@ class SelectedVideoViewController: UIViewController {
         }
         view = selectedVideoView
         
-        playerViewController.videoGravity = .resize
+        playerViewController.videoGravity = .resizeAspect
         playerViewController.player?.play()
         addChild(playerViewController)
     }
