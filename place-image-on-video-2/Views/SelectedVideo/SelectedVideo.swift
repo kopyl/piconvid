@@ -194,7 +194,6 @@ class SelectedVideoView: UIView {
         
         let originalImageSize = image.size
         
-        // Final render size ensures image fits if larger than video
         let finalWidth = max(videoSize.width, originalImageSize.width)
         let aspectRatio = videoSize.width / videoSize.height
         let finalHeight = finalWidth / aspectRatio
@@ -215,7 +214,6 @@ class SelectedVideoView: UIView {
         instruction.layerInstructions = [layerInstruction]
         videoComposition.instructions = [instruction]
         
-        // CALayer setup
         let parentLayer = CALayer()
         let videoLayer = CALayer()
         
@@ -226,7 +224,7 @@ class SelectedVideoView: UIView {
         let overlayLayer = CALayer()
         overlayLayer.contents = image.cgImage
         overlayLayer.masksToBounds = false
-        overlayLayer.contentsGravity = .resizeAspect // can also use `.center` safely
+        overlayLayer.contentsGravity = .resizeAspect
         
         let playerView = playerViewController.view!
         let imageFrameInPlayerView = imageView.convert(imageView.bounds, to: playerView)
