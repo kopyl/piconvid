@@ -29,7 +29,7 @@ class SelectedVideoView: UIView {
     
     private var imageView: DraggableImageView?
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
-
+    
     private let dragHint = Hint(title: Copy.Hints.drag, icon: "arrow.up.and.down")
     private var savingHint: Hint?
     private var successHint: Hint?
