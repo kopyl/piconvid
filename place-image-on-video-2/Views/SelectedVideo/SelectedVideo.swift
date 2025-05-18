@@ -193,8 +193,29 @@ class SelectedVideoView: UIView {
         }
     }
     
+    private func swapVisibleButtonStacks() {
+        UIView.animate(withDuration: 0.2) {
+            self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
+            self.layoutIfNeeded()
+        } completion: { _ in
+            self.initButtonStack.removeFromSuperview()
+            self.addFinalButtonStack()
+            self.layoutIfNeeded()
+            
+            UIView.animate(withDuration: 0.2) {
+                self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
+                self.layoutIfNeeded()
+            }
+        }
+    }
+    
     public func showSecondStageButtons() {
+        if Store.hasDragMessageBeenShownAtLeastOnce {
+            swapVisibleButtonStacks()
+            return
+        }
         showDragHint()
+        Store.hasDragMessageBeenShownAtLeastOnce = true
     }
     
     private func showSavingIndicator() {
