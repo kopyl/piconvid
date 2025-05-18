@@ -8,6 +8,7 @@ struct Copy {
         static let selectOverlayImage = "Pick picture overlay"
         static let changeVideo = "Change video"
         static let saveVideo = "Save video"
+        static let startOver = "Start over"
     }
 }
 

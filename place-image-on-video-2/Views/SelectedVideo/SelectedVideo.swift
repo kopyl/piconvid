@@ -17,9 +17,11 @@ class SelectedVideoView: UIView {
     var videoSavingStarted: (() -> Void)?
     var videoSavingEnded: (() -> Void)?
     var changeVideoTapped: (() -> Void)?
+    var startOverButtonTapped: (() -> Void)?
     
     private var playerViewController: AVPlayerViewController
-    public var buttonStack = ButtonStack([])
+    public var initButtonStack = ButtonStack([])
+    public var finalButtonStack = ButtonStack([])
     public var imageView: DraggableImageView?
     var mainContentContainer = MainContentContainer()
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
@@ -44,12 +46,12 @@ class SelectedVideoView: UIView {
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         changeVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         
-        buttonStack = ButtonStack([changeVideoButton, pickImageButton])
-        addSubview(buttonStack)
-        buttonStack.placeAtTheBottom(of: self)
+        initButtonStack = ButtonStack([changeVideoButton, pickImageButton])
+        addSubview(initButtonStack)
+        initButtonStack.placeAtTheBottom(of: self)
         
         addSubview(mainContentContainer)
-        mainContentContainer.placeAbove(button: buttonStack, inside: self)
+        mainContentContainer.placeAbove(button: initButtonStack, inside: self)
         
         addVideo()
         addPillButton()
@@ -107,11 +109,18 @@ class SelectedVideoView: UIView {
         ])
     }
     
-    public func addSaveButton() {
+    public func addFinalButtonStack() {
+        let startOverButton = Button(title: Copy.Buttons.startOver, type: .secondary)
         let saveButton = Button(title: Copy.Buttons.saveVideo, type: .secondary, icon: "arrow.down")
+        startOverButton.setContentHuggingPriority(.required, for: .horizontal)
+        
+        startOverButton.addTarget(self, action: #selector(startOverButtonTappedAction), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTappedAction), for: .touchUpInside)
-        addSubview(saveButton)
-        saveButton.placeAtTheBottom(of: self)
+        
+        
+        finalButtonStack = ButtonStack([startOverButton, saveButton])
+        addSubview(finalButtonStack)
+        finalButtonStack.placeAtTheBottom(of: self)
     }
     
     public func removePillButton() {
@@ -122,8 +131,8 @@ class SelectedVideoView: UIView {
         if imageView != nil { return }
         let imageURL = Bundle.main.url(forResource: "comment-demo-picture", withExtension: "png")!
         addImage(image: imageURL)
-        buttonStack.layer.opacity = 0
-        addSaveButton()
+        initButtonStack.layer.opacity = 0
+        addFinalButtonStack()
         removePillButton()
     }
     
@@ -133,6 +142,10 @@ class SelectedVideoView: UIView {
     
     @objc private func pickVideoTappedAction() {
         self.changeVideoTapped?()
+    }
+    
+    @objc private func startOverButtonTappedAction() {
+        self.startOverButtonTapped?()
     }
     
     @objc private func saveButtonTappedAction() {
@@ -306,8 +319,8 @@ class SelectedVideoViewController: UIViewController {
         
         imagePicker.imagePicked = { [weak self] imageURL in
             self?.selectedVideoView.addImage(image: imageURL)
-            self?.selectedVideoView.buttonStack.layer.opacity = 0
-            self?.selectedVideoView.addSaveButton()
+            self?.selectedVideoView.initButtonStack.layer.opacity = 0
+            self?.selectedVideoView.addFinalButtonStack()
             self?.selectedVideoView.removePillButton()
         }
         
@@ -331,6 +344,10 @@ class SelectedVideoViewController: UIViewController {
         
         selectedVideoView.changeVideoTapped = { [weak self] in
             self?.videoPicker.presentMediaPicker(forType: .video)
+        }
+        
+        selectedVideoView.startOverButtonTapped = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
         }
         
         videoPicker.videoPicked = { [weak self] videoURL in
