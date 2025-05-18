@@ -190,30 +190,32 @@ class SelectedVideoView: UIView {
         let videoComposition = AVMutableVideoComposition()
         
         guard let imageView else { return }
-        guard let overlaySize = imageView.image?.size else { return }
+        guard let image = imageView.image else { return }
         
-        let finalWidth = max(videoSize.width, overlaySize.width)
+        let originalImageSize = image.size
+        
+        // Final render size ensures image fits if larger than video
+        let finalWidth = max(videoSize.width, originalImageSize.width)
         let aspectRatio = videoSize.width / videoSize.height
         let finalHeight = finalWidth / aspectRatio
         let renderSize = CGSize(width: finalWidth, height: finalHeight)
         
-        videoComposition.renderSize = CGSize(width: finalWidth, height: finalHeight)
-        
+        videoComposition.renderSize = renderSize
         videoComposition.frameDuration = CMTime(value: 1, timescale: 30)
         
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRange(start: .zero, duration: videoAsset.duration)
+        
         let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: compositionVideoTrack!)
         
-        let naturalSize = videoTrack.naturalSize
-        let scale = CGAffineTransform(scaleX: renderSize.width / naturalSize.width,
-                                      y: renderSize.height / naturalSize.height)
-
+        let scale = CGAffineTransform(scaleX: renderSize.width / videoSize.width,
+                                      y: renderSize.height / videoSize.height)
         layerInstruction.setTransform(scale, at: .zero)
         
         instruction.layerInstructions = [layerInstruction]
         videoComposition.instructions = [instruction]
         
+        // CALayer setup
         let parentLayer = CALayer()
         let videoLayer = CALayer()
         
@@ -221,33 +223,33 @@ class SelectedVideoView: UIView {
         videoLayer.frame = CGRect(origin: .zero, size: renderSize)
         parentLayer.addSublayer(videoLayer)
         
-        guard let image = imageView.image else {
-            return
-        }
-
         let overlayLayer = CALayer()
         overlayLayer.contents = image.cgImage
-        overlayLayer.contentsGravity = .resizeAspectFill
-        overlayLayer.masksToBounds = true
+        overlayLayer.masksToBounds = false
+        overlayLayer.contentsGravity = .resizeAspect // can also use `.center` safely
         
         let playerView = playerViewController.view!
-        
         let imageFrameInPlayerView = imageView.convert(imageView.bounds, to: playerView)
         
-        let scaleX = renderSize.width / playerView.frame.width
-        let scaleY = renderSize.height / playerView.frame.height
+        let scaleX = renderSize.width / playerView.bounds.width
+        let scaleY = renderSize.height / playerView.bounds.height
         
-        let flippedY = playerView.frame.height - imageFrameInPlayerView.maxY
+        let centerXInPlayer = imageFrameInPlayerView.midX
+        let centerYInPlayer = imageFrameInPlayerView.midY
+        
+        let centerXInRender = centerXInPlayer * scaleX
+        let centerYInRender = (playerView.bounds.height - centerYInPlayer) * scaleY
         
         overlayLayer.frame = CGRect(
-            x: imageFrameInPlayerView.minX * scaleX,
-            y: flippedY * scaleY,
-            width: imageFrameInPlayerView.width * scaleX,
-            height: imageFrameInPlayerView.height * scaleY
+            origin: CGPoint(
+                x: centerXInRender - originalImageSize.width / 2,
+                y: centerYInRender - originalImageSize.height / 2
+            ),
+            size: originalImageSize
         )
-
+        
         parentLayer.addSublayer(overlayLayer)
-
+        
         videoComposition.animationTool = AVVideoCompositionCoreAnimationTool(
             postProcessingAsVideoLayer: videoLayer,
             in: parentLayer
@@ -259,6 +261,7 @@ class SelectedVideoView: UIView {
         guard let exporter = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetHighestQuality) else {
             return
         }
+        
         exporter.outputURL = outputURL
         exporter.outputFileType = .mov
         exporter.videoComposition = videoComposition
@@ -266,12 +269,12 @@ class SelectedVideoView: UIView {
         exporter.exportAsynchronously {
             DispatchQueue.main.async {
                 guard exporter.status == .completed else { return }
-                    PHPhotoLibrary.shared().performChanges({
-                        PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
-                    }) { success, error in
-                        guard success else { return }
-                        self.videoSavingEnded?()
-                    }
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
+                }) { success, error in
+                    guard success else { return }
+                    self.videoSavingEnded?()
+                }
             }
         }
     }
