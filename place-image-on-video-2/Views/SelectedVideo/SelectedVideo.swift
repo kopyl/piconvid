@@ -243,7 +243,6 @@ class SelectedVideoView: UIView {
         }
     }
     
-    /// errror
     private func notifyUserAboutSuccessSaving() {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.2) {
