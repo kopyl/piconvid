@@ -73,7 +73,6 @@ class SelectedVideoView: UIView {
     
     private func setupView() {
         backgroundColor = .appBackground
-        guard let videoAspectRatio = getVideoAspectRatio(from: playerViewController) else { return }
         
         let changeVideoButton = Button(title: Copy.Buttons.changeVideo, type: .secondary)
         let pickImageButton = Button(title: Copy.Buttons.selectOverlayImage, type: .secondary, icon: "square.2.layers.3d")
