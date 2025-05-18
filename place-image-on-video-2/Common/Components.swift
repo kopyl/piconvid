@@ -89,6 +89,7 @@ class Button: UIButton {
 
 class PillButton: UIButton {
     var title: String?
+    public var topConstraint = NSLayoutConstraint()
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -124,11 +125,13 @@ class PillButton: UIButton {
         contentEdgeInsets = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
     }
 
-    public func placeAtTheTop(of view: UIView) {        
+    public func placeAtTheTop(of view: UIView) {
+        topConstraint = topAnchor.constraint(equalTo: view.topAnchor, constant: UISizes.pillButtonDistanceFromTop)
+        
         NSLayoutConstraint.activate([
             centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            topAnchor.constraint(equalTo: view.topAnchor, constant: 31),
-            heightAnchor.constraint(equalToConstant: 32),
+            topConstraint,
+            heightAnchor.constraint(equalToConstant: UISizes.pillButtonHeight),
         ])
     }
 }

@@ -121,6 +121,8 @@ class SelectedVideoView: UIView {
             imageView.centerXAnchor.constraint(equalTo: playerViewController.view.centerXAnchor),
             imageView.bottomAnchor.constraint(equalTo: playerViewController.view.bottomAnchor)
         ])
+        
+        layoutIfNeeded()
     }
     
     public func addFinalButtonStack() {
@@ -137,7 +139,12 @@ class SelectedVideoView: UIView {
     }
     
     public func removePillButton() {
-        pillButton.removeFromSuperview()
+        UIView.animate(withDuration: 0.1) {
+            self.pillButton.topConstraint.constant = -UISizes.pillButtonHeight
+            self.layoutIfNeeded()
+        } completion: { _ in
+            self.pillButton.removeFromSuperview()
+        }
     }
     
     public func showDragHint() {

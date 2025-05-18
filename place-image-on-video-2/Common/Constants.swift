@@ -2,7 +2,10 @@ import Foundation
 
 struct UISizes {
     static let buttonHeight: CGFloat = 60
+    static let pillButtonHeight: CGFloat = 32
+    
     static let mainGridSpacing: CGFloat = 10
+    static let pillButtonDistanceFromTop: CGFloat = 31
 }
 
 struct Copy {
