@@ -161,6 +161,7 @@
 				DEVELOPMENT_TEAM = 9QNMAN8CT6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Piconvid/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to select a video from your photo library which we later place a picture on.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -191,6 +192,7 @@
 				DEVELOPMENT_TEAM = 9QNMAN8CT6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Piconvid/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to select a video from your photo library which we later place a picture on.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
