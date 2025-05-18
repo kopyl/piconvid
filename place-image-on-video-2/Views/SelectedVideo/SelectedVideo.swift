@@ -109,7 +109,7 @@ class SelectedVideoView: UIView {
     }
     
     public func addSaveButton() {
-        let saveButton = Button(title: Copy.Buttons.saveVideo, type: .secondary)
+        let saveButton = Button(title: Copy.Buttons.saveVideo, type: .secondary, icon: "arrow.down")
         saveButton.addTarget(self, action: #selector(saveButtonTappedAction), for: .touchUpInside)
         addSubview(saveButton)
         saveButton.placeAtTheBottom(of: self)
