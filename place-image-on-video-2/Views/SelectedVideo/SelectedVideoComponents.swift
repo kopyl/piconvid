@@ -1,5 +1,6 @@
 import UIKit
 import AVKit
+import Lottie
 
 class AllButtonStackContainer: UIView {
     public var bottomConstraint = NSLayoutConstraint()
@@ -229,5 +230,56 @@ class ProgressLabel: UILabel {
             trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+}
+
+class ConfettiAnimationView: LottieAnimationView {
+    private var name: String
+    
+    init(name: String) {
+        self.name = name
+        
+        let animation = LottieAnimation.named(name, bundle: Bundle.main, subdirectory: nil, animationCache: LottieAnimationCache.shared)
+        let provider = BundleImageProvider(bundle: Bundle.main, searchPath: nil)
+        super.init(animation: animation, imageProvider: provider, configuration: .shared)
+        
+        setup()
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError( "init(coder:) has not been implemented" )
+    }
+    
+    func setup() {
+        contentMode = .scaleAspectFill
+        translatesAutoresizingMaskIntoConstraints = false
+        loopMode = .playOnce
+        animationSpeed = 1.5
+        translatesAutoresizingMaskIntoConstraints = false
+        isHidden = true
+        isUserInteractionEnabled = false
+    }
+    
+    public func placeAtTheBottom(of view: UIView) {
+        centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        centerYAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+    }
+    
+    private func remove(from view: SelectedVideoView) {
+        isHidden = true
+        stop()
+        removeFromSuperview()
+        view.confettiAnimation = nil
+    }
+    
+    public func shoot(inside view: SelectedVideoView) {
+        isHidden = false
+        play() { [weak self, weak view] _ in
+            guard let v = view else { return }
+            self?.remove(from: v)
+            v.addLottieAnimation()
+        }
     }
 }

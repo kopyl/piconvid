@@ -34,7 +34,7 @@ class SelectedVideoView: UIView {
     private var successHint: Hint?
     private var progressLabel: ProgressLabel?
     private var exportProgressTimer: Timer?
-    private var confettiAnimation = LottieAnimationView()
+    public var confettiAnimation: ConfettiAnimationView?
     
     private var dragHintHidingTask: Task<(), Never>?
     public var isVideoSaving = false
@@ -62,12 +62,14 @@ class SelectedVideoView: UIView {
         addSubview(allButtonStackContainer)
         allButtonStackContainer.placeAtTheBottom(of: self)
         
+        addSubview(mainContentContainer)
+        mainContentContainer.placeAbove(button: allButtonStackContainer, inside: self)
+        
+        addLottieAnimation()
+        
         initButtonStack = ButtonStack([changeVideoButton, pickImageButton])
         allButtonStackContainer.addSubview(initButtonStack)
         initButtonStack.placeInTheCenter(of: allButtonStackContainer)
-        
-        addSubview(mainContentContainer)
-        mainContentContainer.placeAbove(button: allButtonStackContainer, inside: self)
         
         addVideo()
         addPillButton()
@@ -76,33 +78,12 @@ class SelectedVideoView: UIView {
             self?.dragHintHidingTask?.cancel()
         }
         
-        addLottieAnimation()
     }
     
-    private func addLottieAnimation() {
-        confettiAnimation = LottieAnimationView(name: "confetti-lottie")
-        confettiAnimation.contentMode = .scaleAspectFill
-        confettiAnimation.translatesAutoresizingMaskIntoConstraints = false
-        confettiAnimation.loopMode = .playOnce
-        confettiAnimation.animationSpeed = 0.5
-        confettiAnimation.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(confettiAnimation)
-        confettiAnimation.isHidden = true
-        confettiAnimation.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        confettiAnimation.centerYAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        confettiAnimation.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-        confettiAnimation.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-    }
-    
-    private func playLottieAnimation() {
-        confettiAnimation.isHidden = false
-        confettiAnimation.play()
-    }
-    
-    private func removeLotieAnimation() {
-        confettiAnimation.isHidden = true
-        confettiAnimation.stop()
-        confettiAnimation.removeFromSuperview()
+    public func addLottieAnimation() {
+        confettiAnimation = ConfettiAnimationView(name: "confetti-lottie")
+        addSubview(confettiAnimation!)
+        confettiAnimation?.placeAtTheBottom(of: self)
     }
     
     private func addProgressLabel() {
@@ -288,14 +269,14 @@ class SelectedVideoView: UIView {
         self.successHint = Hint(title: Copy.Hints.success, icon: "photo.badge.arrow.down")
         self.allButtonStackContainer.addSubview(self.successHint!)
         self.successHint?.placeInTheCenter(of: allButtonStackContainer)
-        self.playLottieAnimation()
+        self.confettiAnimation?.shoot(inside: self)
         self.layoutIfNeeded()
         
         UIView.animate(withDuration: 0.2) {
             self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
             self.layoutIfNeeded()
         } completion: { _ in
-            UIView.animate(withDuration: 0.2, delay: 1) {
+            UIView.animate(withDuration: 0.2, delay: 2) {
                 self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
                 self.layoutIfNeeded()
             } completion: { _ in
