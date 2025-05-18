@@ -151,7 +151,7 @@ class MainContentContainer: UIView {
     public func placeAbove(button: UIView, inside: UIView) {
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: inside.topAnchor, constant: getSafeAreaPadding().top),
-            bottomAnchor.constraint(equalTo: button.topAnchor, constant: -300),
+            bottomAnchor.constraint(equalTo: button.topAnchor, constant: -10),
             leadingAnchor.constraint(equalTo: inside.leadingAnchor, constant: 10),
             trailingAnchor.constraint(equalTo: inside.trailingAnchor, constant: -10)
         ])
