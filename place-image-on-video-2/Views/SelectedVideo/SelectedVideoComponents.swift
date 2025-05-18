@@ -2,6 +2,8 @@ import UIKit
 import AVKit
 
 class AllButtonStackContainer: UIView {
+    public var bottomConstraint = NSLayoutConstraint()
+    
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
@@ -14,10 +16,12 @@ class AllButtonStackContainer: UIView {
     public func placeAtTheBottom(of view: UIView) {
         let safeAreaPaddingd = getSafeAreaPadding()
         
+        bottomConstraint = bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -safeAreaPaddingd.bottom)
+        
         NSLayoutConstraint.activate([
             centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -safeAreaPaddingd.bottom),
-            heightAnchor.constraint(equalToConstant: 70),
+            bottomConstraint,
+            heightAnchor.constraint(equalToConstant: UISizes.buttonHeight),
             widthAnchor.constraint(equalTo: view.widthAnchor, constant: -20)
         ])
     }
@@ -105,6 +109,7 @@ class DraggableImageView: UIImageView {
 class Hint: UIStackView {
     var title: String?
     var systemImageName: String
+    var onHintTapped: (() -> Void)?
     
     init(title: String, icon systemImageName: String) {
         self.title = title
@@ -133,6 +138,8 @@ class Hint: UIStackView {
         
         addArrangedSubview(imageView)
         addArrangedSubview(labelView)
+        
+        addTapGesture()
     }
     
     public func placeInTheCenter(of view: UIView) {
@@ -140,5 +147,13 @@ class Hint: UIStackView {
             centerXAnchor.constraint(equalTo: view.centerXAnchor),
             centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+    
+    public func addTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hintTapped))
+        self.addGestureRecognizer(tapGesture)
+    }
+    @objc private func hintTapped() {
+        onHintTapped?()
     }
 }

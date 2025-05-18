@@ -29,6 +29,9 @@ class SelectedVideoView: UIView {
     
     public var imageView: DraggableImageView?
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
+    public let dragHint = Hint(title: Copy.Hints.drag, icon: "arrow.up.and.down")
+    
+    private var dragHintHidingTask: Task<(), Never>?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -62,6 +65,10 @@ class SelectedVideoView: UIView {
         
         addVideo()
         addPillButton()
+        
+        dragHint.onHintTapped = { [weak self] in
+            self?.dragHintHidingTask?.cancel()
+        }
     }
     
     private func addVideo() {
@@ -133,12 +140,55 @@ class SelectedVideoView: UIView {
         pillButton.removeFromSuperview()
     }
     
+    public func showDragHint() {
+        UIView.animate(withDuration: 0.2) {
+            self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
+            self.layoutIfNeeded()
+        } completion: { _ in
+            self.initButtonStack.removeFromSuperview()
+            self.allButtonStackContainer.addSubview(self.dragHint)
+            self.dragHint.placeInTheCenter(of: self.allButtonStackContainer)
+            self.layoutIfNeeded()
+            
+            UIView.animate(withDuration: 0.2) {
+                self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
+                self.layoutIfNeeded()
+            } completion: { _ in
+                self.hideDragHint(after: 1_300_000_000)
+                self.layoutIfNeeded()
+            }
+        }
+    }
+    
+    public func hideDragHint(after nanoseconds: UInt64 = 0) {
+        dragHintHidingTask = Task {
+            try? await Task.sleep(nanoseconds: nanoseconds)
+            
+            UIView.animate(withDuration: 0.2) {
+                self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
+                self.layoutIfNeeded()
+            } completion: { _ in
+                self.dragHint.removeFromSuperview()
+                self.addFinalButtonStack()
+                self.layoutIfNeeded()
+                UIView.animate(withDuration: 0.2) {
+                    self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
+                    self.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
+    public func showSecondStageButtons() {
+        showDragHint()
+    }
+    
     @objc private func tryDemoPictureTappedAction() {
         if imageView != nil { return }
+        
         let imageURL = Bundle.main.url(forResource: "comment-demo-picture", withExtension: "png")!
+        showSecondStageButtons()
         addImage(image: imageURL)
-        initButtonStack.layer.opacity = 0
-        addFinalButtonStack()
         removePillButton()
     }
     
@@ -325,8 +375,7 @@ class SelectedVideoViewController: UIViewController {
         
         imagePicker.imagePicked = { [weak self] imageURL in
             self?.selectedVideoView.addImage(image: imageURL)
-            self?.selectedVideoView.initButtonStack.layer.opacity = 0
-            self?.selectedVideoView.addFinalButtonStack()
+            self?.selectedVideoView.showSecondStageButtons()
             self?.selectedVideoView.removePillButton()
         }
         

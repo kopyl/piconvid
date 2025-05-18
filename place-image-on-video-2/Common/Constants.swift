@@ -1,3 +1,10 @@
+import Foundation
+
+struct UISizes {
+    static let buttonHeight: CGFloat = 60
+    static let mainGridSpacing: CGFloat = 10
+}
+
 struct Copy {
     static let heroTitle = "Put picture on a vertical video"
     

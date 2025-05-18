@@ -149,11 +149,14 @@ class MainContentContainer: UIView {
         layer.masksToBounds = true
     }
     public func placeAbove(button: UIView, inside: UIView) {
+        let safeAreaPadding = getSafeAreaPadding()
+        let bottomInset = safeAreaPadding.bottom + UISizes.buttonHeight + UISizes.mainGridSpacing
+        
         NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: inside.topAnchor, constant: getSafeAreaPadding().top),
-            bottomAnchor.constraint(equalTo: button.topAnchor, constant: -10),
-            leadingAnchor.constraint(equalTo: inside.leadingAnchor, constant: 10),
-            trailingAnchor.constraint(equalTo: inside.trailingAnchor, constant: -10)
+            topAnchor.constraint(equalTo: inside.topAnchor, constant: safeAreaPadding.top),
+            bottomAnchor.constraint(equalTo: inside.bottomAnchor, constant: -bottomInset),
+            leadingAnchor.constraint(equalTo: inside.leadingAnchor, constant: UISizes.mainGridSpacing),
+            trailingAnchor.constraint(equalTo: inside.trailingAnchor, constant: -UISizes.mainGridSpacing)
         ])
     }
 }
