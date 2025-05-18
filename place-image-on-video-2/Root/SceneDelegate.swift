@@ -26,9 +26,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UIGestureRecognizerDele
         return false
     }
     
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {        
+    private func isMediaSelectionSheetPresented() -> Bool {
         if window?.rootViewController?.presentedViewController != nil {
-            return false /// A sheet is currently presented
+            return true
+        }
+        return false
+    }
+    
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {        
+        if isMediaSelectionSheetPresented() {
+            return false
         }
         if isVideoSaving() {
             return false
