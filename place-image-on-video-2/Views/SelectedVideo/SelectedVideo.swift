@@ -20,6 +20,7 @@ class SelectedVideoView: UIView {
     public var imageView: DraggableImageView?
     var changeVideoTapped: (() -> Void)?
     var mainContentContainer = MainContentContainer()
+    private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -54,7 +55,6 @@ class SelectedVideoView: UIView {
     }
     
     private func addPillButton() {
-        let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
         pillButton.addTarget(self, action: #selector(tryDemoPictureTappedAction), for: .touchUpInside)
         mainContentContainer.addSubview(pillButton)
         pillButton.placeAtTheTop(of: mainContentContainer)
