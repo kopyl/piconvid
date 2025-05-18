@@ -42,29 +42,32 @@ class Button: UIButton {
     private func setup() {
         guard let title else { return }
         
-        let attributedStringNormal = NSMutableAttributedString(string: title)
-        attributedStringNormal.addAttribute(.kern, value: -0.2, range: NSRange(location: 0, length: title.count))
-        attributedStringNormal.addAttribute(.foregroundColor, value: UIColor.buttonText, range: NSRange(location: 0, length: title.count))
-        setAttributedTitle(attributedStringNormal, for: .normal)
-        
-        let attributedStringHighlighted = NSMutableAttributedString(string: title)
-        attributedStringHighlighted.addAttribute(.kern, value: -0.2, range: NSRange(location: 0, length: title.count))
-        attributedStringHighlighted.addAttribute(.foregroundColor, value: UIColor.buttonText.withAlphaComponent(0.5), range: NSRange(location: 0, length: title.count))
-        setAttributedTitle(attributedStringHighlighted, for: .highlighted)
-        
         var fontSize: CGFloat
+        var buttonTextColor: UIColor
         switch type {
         case .primary:
             fontSize = 15
             backgroundColor = .primaryButtonBackground
+            buttonTextColor = UIColor.primaryButtonText
         case .secondary:
             fontSize = 13
             backgroundColor = .secondaryButtonBackground
+            buttonTextColor = UIColor.secondaryButtonText
         }
         titleLabel?.font = UIFont.systemFont(ofSize: fontSize, weight: .medium)
         
+        let attributedStringNormal = NSMutableAttributedString(string: title)
+        attributedStringNormal.addAttribute(.kern, value: -0.2, range: NSRange(location: 0, length: title.count))
+        attributedStringNormal.addAttribute(.foregroundColor, value: buttonTextColor, range: NSRange(location: 0, length: title.count))
+        setAttributedTitle(attributedStringNormal, for: .normal)
+        
+        let attributedStringHighlighted = NSMutableAttributedString(string: title)
+        attributedStringHighlighted.addAttribute(.kern, value: -0.2, range: NSRange(location: 0, length: title.count))
+        attributedStringHighlighted.addAttribute(.foregroundColor, value: buttonTextColor.withAlphaComponent(0.5), range: NSRange(location: 0, length: title.count))
+        setAttributedTitle(attributedStringHighlighted, for: .highlighted)
+        
         translatesAutoresizingMaskIntoConstraints = false
-        setTitleColor(.buttonText, for: .normal)
+        setTitleColor(.primaryButtonText, for: .normal)
         layer.cornerRadius = 4
         
         contentEdgeInsets = UIEdgeInsets(top: 0, left: 19, bottom: 0, right: 19)
@@ -74,7 +77,7 @@ class Button: UIButton {
         guard let image else { return }
         
         setImage(image, for: .normal)
-        imageView?.tintColor = .buttonText
+        imageView?.tintColor = buttonTextColor
         
         let insetAmount: CGFloat = 14
         imageEdgeInsets.right = insetAmount
@@ -127,8 +130,8 @@ class PillButton: UIButton {
         setTitle(title, for: .normal)
         titleLabel?.font = UIFont.systemFont(ofSize: 13)
         translatesAutoresizingMaskIntoConstraints = false
-        setTitleColor(.buttonText, for: .normal)
-        setTitleColor(.buttonText.withAlphaComponent(0.5), for: .highlighted)
+        setTitleColor(.pillButtonText, for: .normal)
+        setTitleColor(.pillButtonText.withAlphaComponent(0.5), for: .highlighted)
         contentEdgeInsets = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
     }
     

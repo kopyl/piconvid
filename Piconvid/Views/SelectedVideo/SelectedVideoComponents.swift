@@ -148,7 +148,7 @@ class Hint: UIStackView {
         labelView.layer.opacity = 0.8
         
         imageView.image = UIImage(systemName: systemImageName)
-        imageView.tintColor = .white
+        imageView.tintColor = .secondaryButtonText
         imageView.layer.opacity = 0.8
         
         addArrangedSubview(imageView)
