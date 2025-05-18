@@ -2,7 +2,7 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, UIGestureRecognizerDelegate {
     var window: UIWindow?
-
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
         
@@ -42,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UIGestureRecognizerDele
         }
         return window?.rootViewController?.children.count ?? 0 > 1
     }
-        
+    
     /// Allows interactivePopGestureRecognizer to work simultaneously with other gestures.
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         window?.rootViewController?.children.count ?? 0 > 1

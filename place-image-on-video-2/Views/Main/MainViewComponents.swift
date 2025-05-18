@@ -27,7 +27,7 @@ class HeroTitle: UILabel {
         
         translatesAutoresizingMaskIntoConstraints = false
     }
-
+    
     public func placeAtTheBottom(of view: UIView) {
         NSLayoutConstraint.activate([
             bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -105),

@@ -223,7 +223,7 @@ class ProgressLabel: UILabel {
         font = .systemFont(ofSize: 13)
         layer.opacity = 0.8
     }
-
+    
     public func placeOnTheRight(of view: UIView) {
         NSLayoutConstraint.activate([
             trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),

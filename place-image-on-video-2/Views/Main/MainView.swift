@@ -12,7 +12,7 @@ class MainView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     private func setupView() {
         let pickVideoButton = Button(title: Copy.Buttons.pickVideo, type: .primary, icon: IconNames.video)
         pickVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
@@ -53,7 +53,7 @@ class MainViewController: UIViewController {
         }
         view = mainView
     }
-
+    
     override func viewDidLoad() {
         videoPicker = MediaPickerController(presenter: self)
         

@@ -16,7 +16,7 @@ func getSafeAreaPadding() -> SafeAreaPadding {
         .compactMap { $0 as? UIWindowScene }
         .flatMap { $0.windows }
         .first { $0.isKeyWindow }
-
+    
     let insets = window?.safeAreaInsets ?? .zero
     return SafeAreaPadding(top: insets.top, bottom: insets.bottom)
 }
@@ -46,7 +46,7 @@ class Button: UIButton {
         attributedStringNormal.addAttribute(.kern, value: -0.2, range: NSRange(location: 0, length: title.count))
         attributedStringNormal.addAttribute(.foregroundColor, value: UIColor.buttonText, range: NSRange(location: 0, length: title.count))
         setAttributedTitle(attributedStringNormal, for: .normal)
-
+        
         let attributedStringHighlighted = NSMutableAttributedString(string: title)
         attributedStringHighlighted.addAttribute(.kern, value: -0.2, range: NSRange(location: 0, length: title.count))
         attributedStringHighlighted.addAttribute(.foregroundColor, value: UIColor.buttonText.withAlphaComponent(0.5), range: NSRange(location: 0, length: title.count))
@@ -72,7 +72,7 @@ class Button: UIButton {
         guard let imageName = systemImageName else { return }
         let image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: fontSize)))
         guard let image else { return }
-
+        
         setImage(image, for: .normal)
         imageView?.tintColor = .buttonText
         
@@ -110,7 +110,7 @@ class PillButton: UIButton {
     
     private func setup() {
         guard let title else { return }
-
+        
         let backgroundBlur = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
         backgroundBlur.layer.cornerRadius = 16
         backgroundBlur.layer.masksToBounds = true
@@ -131,7 +131,7 @@ class PillButton: UIButton {
         setTitleColor(.buttonText.withAlphaComponent(0.5), for: .highlighted)
         contentEdgeInsets = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
     }
-
+    
     public func placeAtTheTop(of view: UIView) {
         topConstraint = topAnchor.constraint(equalTo: view.topAnchor, constant: UISizes.pillButtonDistanceFromTop)
         

@@ -441,9 +441,9 @@ class SelectedVideoView: UIView {
             DispatchQueue.main.async {
                 self.exportProgressTimer?.invalidate()
                 self.exportProgressTimer = nil
-
+                
                 guard exporter.status == .completed else { return }
-
+                
                 PHPhotoLibrary.shared().performChanges({
                     PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
                 }) { success, error in
