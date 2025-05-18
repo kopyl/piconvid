@@ -12,13 +12,15 @@ func getVideoAspectRatio(from playerViewController: AVPlayerViewController) -> C
 }
 
 class SelectedVideoView: UIView {
+    
     var pickImageTapped: (() -> Void)?
     var videoSavingStarted: (() -> Void)?
     var videoSavingEnded: (() -> Void)?
+    var changeVideoTapped: (() -> Void)?
+    
     private var playerViewController: AVPlayerViewController
     public var buttonsStack: ButtonStack
     public var imageView: DraggableImageView?
-    var changeVideoTapped: (() -> Void)?
     var mainContentContainer = MainContentContainer()
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
     
