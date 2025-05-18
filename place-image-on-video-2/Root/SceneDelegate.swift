@@ -15,11 +15,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UIGestureRecognizerDele
         self.window = window
     }
     
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    private func isVideoSaving() -> Bool {
+        let selectedVideoVC = window?.rootViewController?.children.first(where: {$0 is SelectedVideoViewController})
+        let selectedVideoView = selectedVideoVC?.view as? SelectedVideoView
+        if let view = selectedVideoView {
+            if view.isVideoSaving {
+                return true
+            }
+        }
+        return false
+    }
+    
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {        
         if window?.rootViewController?.presentedViewController != nil {
             return false /// A sheet is currently presented
         }
-        
+        if isVideoSaving() {
+            return false
+        }
         return window?.rootViewController?.children.count ?? 0 > 1
     }
         

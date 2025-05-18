@@ -14,8 +14,6 @@ func getVideoAspectRatio(from playerViewController: AVPlayerViewController) -> C
 class SelectedVideoView: UIView {
     
     var pickImageTapped: (() -> Void)?
-    var videoSavingStarted: (() -> Void)?
-    var videoSavingEnded: (() -> Void)?
     var changeVideoTapped: (() -> Void)?
     var startOverButtonTapped: (() -> Void)?
     
@@ -30,8 +28,11 @@ class SelectedVideoView: UIView {
     public var imageView: DraggableImageView?
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
     public let dragHint = Hint(title: Copy.Hints.drag, icon: "arrow.up.and.down")
+    public var savingHint: Hint?
+    public var successHint: Hint?
     
     private var dragHintHidingTask: Task<(), Never>?
+    public var isVideoSaving = false
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -196,6 +197,67 @@ class SelectedVideoView: UIView {
         showDragHint()
     }
     
+    private func showSavingIndicator() {
+        UIView.animate(withDuration: 0.2) {
+            self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
+            self.layoutIfNeeded()
+        } completion: { _ in
+            self.savingHint = Hint(title: Copy.Hints.saving, icon: "arrow.down")
+            self.allButtonStackContainer.addSubview(self.savingHint!)
+            self.savingHint?.placeInTheCenter(of: self.allButtonStackContainer)
+            self.finalButtonStack.removeFromSuperview()
+            self.layoutIfNeeded()
+            
+            UIView.animate(withDuration: 0.2) {
+                self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
+                self.layoutIfNeeded()
+                self.savingHint?.shakeIcon()
+            }
+        }
+    }
+    
+    private func showSuccessNotification() {
+        self.successHint = Hint(title: Copy.Hints.success, icon: "photo.badge.arrow.down")
+        self.allButtonStackContainer.addSubview(self.successHint!)
+        self.successHint?.placeInTheCenter(of: allButtonStackContainer)
+        self.layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.2) {
+            self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
+            self.layoutIfNeeded()
+        } completion: { _ in
+            UIView.animate(withDuration: 0.2, delay: 1) {
+                self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
+                self.layoutIfNeeded()
+            } completion: { _ in
+                self.successHint?.removeFromSuperview()
+                self.successHint = nil
+                self.addFinalButtonStack()
+                self.layoutIfNeeded()
+                
+                UIView.animate(withDuration: 0.2) {
+                    self.allButtonStackContainer.bottomConstraint.constant = -getSafeAreaPadding().bottom
+                    self.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
+    /// errror
+    private func notifyUserAboutSuccessSaving() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.2) {
+                self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
+                self.layoutIfNeeded()
+            } completion: { _ in
+                self.savingHint?.removeFromSuperview()
+                self.savingHint = nil
+                self.showSuccessNotification()
+                self.layoutIfNeeded()
+            }
+        }
+    }
+    
     @objc private func tryDemoPictureTappedAction() {
         if imageView != nil { return }
         
@@ -218,7 +280,8 @@ class SelectedVideoView: UIView {
     }
     
     @objc private func saveButtonTappedAction() {
-        videoSavingStarted?()
+        isVideoSaving = true
+        showSavingIndicator()
         
         guard let videoAsset = playerViewController.player?.currentItem?.asset as? AVURLAsset else { return }
         
@@ -339,7 +402,8 @@ class SelectedVideoView: UIView {
                     PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL)
                 }) { success, error in
                     guard success else { return }
-                    self.videoSavingEnded?()
+                    self.notifyUserAboutSuccessSaving()
+                    self.isVideoSaving = false
                 }
             }
         }
@@ -389,22 +453,6 @@ class SelectedVideoViewController: UIViewController {
             self?.selectedVideoView.addImage(image: imageURL)
             self?.selectedVideoView.showSecondStageButtons()
             self?.selectedVideoView.removePillButton()
-        }
-        
-        selectedVideoView.videoSavingStarted = { [weak self] in
-            guard let alert = self?.alert else { return }
-            self?.present(alert, animated: true)
-        }
-        
-        selectedVideoView.videoSavingEnded = { [weak self] in
-            Task {
-                guard let alert = self?.alert else { return }
-                alert.dismiss(animated: true)
-                alert.title = "Video saved"
-                self?.present(alert, animated: true)
-                try await Task.sleep(nanoseconds: 2_000_000_000)
-                alert.dismiss(animated: true)
-            }
         }
         
         videoPicker = MediaPickerController(presenter: self)

@@ -111,6 +111,8 @@ class Hint: UIStackView {
     var systemImageName: String
     var onHintTapped: (() -> Void)?
     
+    public let imageView = UIImageView()
+    
     init(title: String, icon systemImageName: String) {
         self.title = title
         self.systemImageName = systemImageName
@@ -131,7 +133,6 @@ class Hint: UIStackView {
         labelView.font = .systemFont(ofSize: 13)
         labelView.layer.opacity = 0.8
         
-        let imageView = UIImageView()
         imageView.image = UIImage(systemName: systemImageName)
         imageView.tintColor = .white
         imageView.layer.opacity = 0.8
@@ -140,6 +141,36 @@ class Hint: UIStackView {
         addArrangedSubview(labelView)
         
         addTapGesture()
+    }
+    
+    public func shakeIcon() {
+        let moveDistance: CGFloat = 6
+        let duration = 0.3
+        
+        func animateUpDown() {
+            UIView.animate(
+                withDuration: duration,
+                delay: 0,
+                options: [.allowUserInteraction],
+                animations: {
+                    self.imageView.transform = CGAffineTransform(translationX: 0, y: -moveDistance)
+                },
+                completion: { _ in
+                    UIView.animate(
+                        withDuration: duration,
+                        delay: 0,
+                        options: [.allowUserInteraction],
+                        animations: {
+                            self.imageView.transform = CGAffineTransform(translationX: 0, y: moveDistance)
+                        },
+                        completion: { _ in
+                            /// Repeat
+                            animateUpDown()
+                        })
+                })
+        }
+        
+        animateUpDown()
     }
     
     public func placeInTheCenter(of view: UIView) {
