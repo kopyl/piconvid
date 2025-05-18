@@ -98,7 +98,7 @@ class SelectedVideoView: UIView {
             playerViewController.view.centerXAnchor.constraint(equalTo: mainContentContainer.centerXAnchor),
             playerViewController.view.centerYAnchor.constraint(equalTo: mainContentContainer.centerYAnchor),
             playerViewController.view.widthAnchor.constraint(equalTo: mainContentContainer.widthAnchor),
-       ])
+        ])
         
         DispatchQueue.main.async {
             let containerAspectRatio = self.mainContentContainer.frame.width / self.mainContentContainer.frame.height
