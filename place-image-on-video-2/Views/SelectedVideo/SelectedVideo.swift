@@ -54,12 +54,6 @@ class SelectedVideoView: UIView {
         addPillButton()
     }
     
-    private func addPillButton() {
-        pillButton.addTarget(self, action: #selector(tryDemoPictureTappedAction), for: .touchUpInside)
-        mainContentContainer.addSubview(pillButton)
-        pillButton.placeAtTheTop(of: mainContentContainer)
-    }
-    
     private func addVideo() {
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         mainContentContainer.addSubview(playerViewController.view)
@@ -82,6 +76,12 @@ class SelectedVideoView: UIView {
                 )
             ])
         }
+    }
+    
+    private func addPillButton() {
+        pillButton.addTarget(self, action: #selector(tryDemoPictureTappedAction), for: .touchUpInside)
+        mainContentContainer.addSubview(pillButton)
+        pillButton.placeAtTheTop(of: mainContentContainer)
     }
     
     public func addImage(image: URL) {
