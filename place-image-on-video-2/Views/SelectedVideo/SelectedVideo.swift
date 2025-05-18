@@ -49,7 +49,7 @@ class SelectedVideoView: UIView {
         addSubview(mainContentContainer)
         mainContentContainer.placeAbove(button: buttonsStack, inside: self)
         
-        addViedeo()
+        addVideo()
         addPillButton()
     }
     
@@ -60,7 +60,7 @@ class SelectedVideoView: UIView {
         pillButton.placeAtTheTop(of: mainContentContainer)
     }
     
-    private func addViedeo() {
+    private func addVideo() {
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         mainContentContainer.addSubview(playerViewController.view)
         
