@@ -1,6 +1,7 @@
 import UIKit
 import AVKit
 import Photos
+import Lottie
 
 func getVideoAspectRatio(from playerViewController: AVPlayerViewController) -> CGFloat? {
     guard let asset = playerViewController.player?.currentItem?.asset else { return nil }
@@ -31,6 +32,7 @@ class SelectedVideoView: UIView {
     private let dragHint = Hint(title: Copy.Hints.drag, icon: "arrow.up.and.down")
     private var savingHint: Hint?
     private var successHint: Hint?
+    private var confettiAnimation = LottieAnimationView()
     
     private var dragHintHidingTask: Task<(), Never>?
     public var isVideoSaving = false
@@ -71,6 +73,34 @@ class SelectedVideoView: UIView {
         dragHint.onHintTapped = { [weak self] in
             self?.dragHintHidingTask?.cancel()
         }
+        
+        addLottieAnimation()
+    }
+    
+    private func addLottieAnimation() {
+        confettiAnimation = LottieAnimationView(name: "confetti-lottie")
+        confettiAnimation.contentMode = .scaleAspectFill
+        confettiAnimation.translatesAutoresizingMaskIntoConstraints = false
+        confettiAnimation.loopMode = .playOnce
+        confettiAnimation.animationSpeed = 0.5
+        confettiAnimation.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(confettiAnimation)
+        confettiAnimation.isHidden = true
+        confettiAnimation.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        confettiAnimation.centerYAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        confettiAnimation.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        confettiAnimation.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+    }
+    
+    private func playLottieAnimation() {
+        confettiAnimation.isHidden = false
+        confettiAnimation.play()
+    }
+    
+    private func removeLotieAnimation() {
+        confettiAnimation.isHidden = true
+        confettiAnimation.stop()
+        confettiAnimation.removeFromSuperview()
     }
     
     private func addVideo() {
@@ -243,6 +273,7 @@ class SelectedVideoView: UIView {
         self.successHint = Hint(title: Copy.Hints.success, icon: "photo.badge.arrow.down")
         self.allButtonStackContainer.addSubview(self.successHint!)
         self.successHint?.placeInTheCenter(of: allButtonStackContainer)
+        self.playLottieAnimation()
         self.layoutIfNeeded()
         
         UIView.animate(withDuration: 0.2) {
