@@ -209,7 +209,7 @@ class SelectedVideoView: UIView {
         }
     }
     
-    public func showSecondStageButtons() {
+    public func showSecondStageBottomButtons() {
         if Store.hasDragMessageBeenShownAtLeastOnce {
             swapVisibleButtonStacks()
             return
@@ -282,7 +282,7 @@ class SelectedVideoView: UIView {
         if imageView != nil { return }
         
         let imageURL = Bundle.main.url(forResource: "comment-demo-picture", withExtension: "png")!
-        showSecondStageButtons()
+        showSecondStageBottomButtons()
         addImage(image: imageURL)
         removePillButton()
     }
@@ -471,7 +471,7 @@ class SelectedVideoViewController: UIViewController {
         
         imagePicker.imagePicked = { [weak self] imageURL in
             self?.selectedVideoView.addImage(image: imageURL)
-            self?.selectedVideoView.showSecondStageButtons()
+            self?.selectedVideoView.showSecondStageBottomButtons()
             self?.selectedVideoView.removePillButton()
         }
         
