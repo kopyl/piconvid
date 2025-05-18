@@ -19,7 +19,7 @@ class SelectedVideoView: UIView {
     var changeVideoTapped: (() -> Void)?
     
     private var playerViewController: AVPlayerViewController
-    public var buttonStack: ButtonStack
+    public var buttonStack = ButtonStack([])
     public var imageView: DraggableImageView?
     var mainContentContainer = MainContentContainer()
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
@@ -30,7 +30,6 @@ class SelectedVideoView: UIView {
     
     init(playerViewController: AVPlayerViewController) {
         self.playerViewController = playerViewController
-        buttonStack = ButtonStack([])
         super.init(frame: .zero)
         setupView()
     }
