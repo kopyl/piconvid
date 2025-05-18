@@ -479,7 +479,12 @@ class SelectedVideoView: UIView {
         let outputURL = FileManager.default.temporaryDirectory.appendingPathComponent("exported.mov")
         try? FileManager.default.removeItem(at: outputURL)
         
-        guard let exporter = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetHighestQuality) else {
+        #if targetEnvironment(simulator)
+        let preset = AVAssetExportPresetPassthrough
+        #else
+        let preset = AVAssetExportPresetHighestQuality
+        #endif
+        guard let exporter = AVAssetExportSession(asset: mixComposition, presetName: preset) else {
             return
         }
         
