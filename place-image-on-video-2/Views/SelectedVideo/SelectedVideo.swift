@@ -108,6 +108,8 @@ class SelectedVideoView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+        imageView.layer.opacity = 0
+        
         mainContentContainer.addSubview(imageView)
         
         let videoAR = getVideoAspectRatio(from: playerViewController)
@@ -123,6 +125,10 @@ class SelectedVideoView: UIView {
         ])
         
         layoutIfNeeded()
+        
+        UIView.animate(withDuration: 0.2) {
+            imageView.layer.opacity = 1
+        }
     }
     
     public func addFinalButtonStack() {
