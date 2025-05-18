@@ -19,17 +19,17 @@ class SelectedVideoView: UIView {
     
     private var playerViewController: AVPlayerViewController
     
-    public var initButtonStack = ButtonStack([])
-    public var finalButtonStack = ButtonStack([])
+    private var initButtonStack = ButtonStack([])
+    private var finalButtonStack = ButtonStack([])
     
-    public var allButtonStackContainer = AllButtonStackContainer()
+    private var allButtonStackContainer = AllButtonStackContainer()
     var mainContentContainer = MainContentContainer()
     
-    public var imageView: DraggableImageView?
+    private var imageView: DraggableImageView?
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
-    public let dragHint = Hint(title: Copy.Hints.drag, icon: "arrow.up.and.down")
-    public var savingHint: Hint?
-    public var successHint: Hint?
+    private let dragHint = Hint(title: Copy.Hints.drag, icon: "arrow.up.and.down")
+    private var savingHint: Hint?
+    private var successHint: Hint?
     
     private var dragHintHidingTask: Task<(), Never>?
     public var isVideoSaving = false
@@ -132,7 +132,7 @@ class SelectedVideoView: UIView {
         }
     }
     
-    public func addFinalButtonStack() {
+    private func addFinalButtonStack() {
         let startOverButton = Button(title: Copy.Buttons.startOver, type: .secondary)
         let saveButton = Button(title: Copy.Buttons.saveVideo, type: .secondary, icon: "arrow.down")
         startOverButton.setContentHuggingPriority(.required, for: .horizontal)
@@ -154,7 +154,7 @@ class SelectedVideoView: UIView {
         }
     }
     
-    public func showDragHint() {
+    private func showDragHint() {
         UIView.animate(withDuration: 0.2) {
             self.allButtonStackContainer.bottomConstraint.constant = UISizes.buttonHeight
             self.layoutIfNeeded()
@@ -175,7 +175,7 @@ class SelectedVideoView: UIView {
         }
     }
     
-    public func hideDragHint(after nanoseconds: UInt64 = 0) {
+    private func hideDragHint(after nanoseconds: UInt64 = 0) {
         dragHintHidingTask = Task {
             try? await Task.sleep(nanoseconds: nanoseconds)
             
