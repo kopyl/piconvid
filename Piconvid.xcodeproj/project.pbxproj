@@ -12,16 +12,16 @@
 
 /* Begin PBXFileReference section */
 		4862F5DD2DD95A5C00E6CE9E /* Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Previews.swift; sourceTree = "<group>"; };
-		48BE1E812DCD903000AD6152 /* place-image-on-video-2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "place-image-on-video-2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		48BE1E812DCD903000AD6152 /* Piconvid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Piconvid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		48BE1E932DCD903200AD6152 /* Exceptions for "place-image-on-video-2" folder in "place-image-on-video-2" target */ = {
+		48BE1E932DCD903200AD6152 /* Exceptions for "place-image-on-video-2" folder in "Piconvid" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 48BE1E802DCD903000AD6152 /* place-image-on-video-2 */;
+			target = 48BE1E802DCD903000AD6152 /* Piconvid */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -29,7 +29,7 @@
 		48BE1E832DCD903000AD6152 /* place-image-on-video-2 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				48BE1E932DCD903200AD6152 /* Exceptions for "place-image-on-video-2" folder in "place-image-on-video-2" target */,
+				48BE1E932DCD903200AD6152 /* Exceptions for "place-image-on-video-2" folder in "Piconvid" target */,
 			);
 			path = "place-image-on-video-2";
 			sourceTree = "<group>";
@@ -59,7 +59,7 @@
 		48BE1E822DCD903000AD6152 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				48BE1E812DCD903000AD6152 /* place-image-on-video-2.app */,
+				48BE1E812DCD903000AD6152 /* Piconvid.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -67,9 +67,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		48BE1E802DCD903000AD6152 /* place-image-on-video-2 */ = {
+		48BE1E802DCD903000AD6152 /* Piconvid */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 48BE1E942DCD903200AD6152 /* Build configuration list for PBXNativeTarget "place-image-on-video-2" */;
+			buildConfigurationList = 48BE1E942DCD903200AD6152 /* Build configuration list for PBXNativeTarget "Piconvid" */;
 			buildPhases = (
 				48BE1E7D2DCD903000AD6152 /* Sources */,
 				48BE1E7E2DCD903000AD6152 /* Frameworks */,
@@ -82,11 +82,11 @@
 			fileSystemSynchronizedGroups = (
 				48BE1E832DCD903000AD6152 /* place-image-on-video-2 */,
 			);
-			name = "place-image-on-video-2";
+			name = Piconvid;
 			packageProductDependencies = (
 			);
 			productName = "place-image-on-video-2";
-			productReference = 48BE1E812DCD903000AD6152 /* place-image-on-video-2.app */;
+			productReference = 48BE1E812DCD903000AD6152 /* Piconvid.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -104,7 +104,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 48BE1E7C2DCD903000AD6152 /* Build configuration list for PBXProject "place-image-on-video-2" */;
+			buildConfigurationList = 48BE1E7C2DCD903000AD6152 /* Build configuration list for PBXProject "Piconvid" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -118,7 +118,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				48BE1E802DCD903000AD6152 /* place-image-on-video-2 */,
+				48BE1E802DCD903000AD6152 /* Piconvid */,
 			);
 		};
 /* End PBXProject section */
@@ -167,7 +167,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "kopyl.place-image-on-video-2";
+				PRODUCT_BUNDLE_IDENTIFIER = kopyl.piconvid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -197,7 +197,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "kopyl.place-image-on-video-2";
+				PRODUCT_BUNDLE_IDENTIFIER = kopyl.piconvid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -329,7 +329,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		48BE1E7C2DCD903000AD6152 /* Build configuration list for PBXProject "place-image-on-video-2" */ = {
+		48BE1E7C2DCD903000AD6152 /* Build configuration list for PBXProject "Piconvid" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				48BE1E972DCD903200AD6152 /* Debug */,
@@ -338,7 +338,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		48BE1E942DCD903200AD6152 /* Build configuration list for PBXNativeTarget "place-image-on-video-2" */ = {
+		48BE1E942DCD903200AD6152 /* Build configuration list for PBXNativeTarget "Piconvid" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				48BE1E952DCD903200AD6152 /* Debug */,
