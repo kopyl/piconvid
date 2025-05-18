@@ -19,7 +19,7 @@ class SelectedVideoView: UIView {
     var changeVideoTapped: (() -> Void)?
     
     private var playerViewController: AVPlayerViewController
-    public var buttonsStack: ButtonStack
+    public var buttonStack: ButtonStack
     public var imageView: DraggableImageView?
     var mainContentContainer = MainContentContainer()
     private let pillButton = PillButton(title: Copy.Buttons.tryDemoPicture)
@@ -30,7 +30,7 @@ class SelectedVideoView: UIView {
     
     init(playerViewController: AVPlayerViewController) {
         self.playerViewController = playerViewController
-        buttonsStack = ButtonStack([])
+        buttonStack = ButtonStack([])
         super.init(frame: .zero)
         setupView()
     }
@@ -45,12 +45,12 @@ class SelectedVideoView: UIView {
         pickImageButton.addTarget(self, action: #selector(pickImageTappedAction), for: .touchUpInside)
         changeVideoButton.addTarget(self, action: #selector(pickVideoTappedAction), for: .touchUpInside)
         
-        buttonsStack = ButtonStack([changeVideoButton, pickImageButton])
-        addSubview(buttonsStack)
-        buttonsStack.placeAtTheBottom(of: self)
+        buttonStack = ButtonStack([changeVideoButton, pickImageButton])
+        addSubview(buttonStack)
+        buttonStack.placeAtTheBottom(of: self)
         
         addSubview(mainContentContainer)
-        mainContentContainer.placeAbove(button: buttonsStack, inside: self)
+        mainContentContainer.placeAbove(button: buttonStack, inside: self)
         
         addVideo()
         addPillButton()
@@ -123,7 +123,7 @@ class SelectedVideoView: UIView {
         if imageView != nil { return }
         let imageURL = Bundle.main.url(forResource: "comment-demo-picture", withExtension: "png")!
         addImage(image: imageURL)
-        buttonsStack.layer.opacity = 0
+        buttonStack.layer.opacity = 0
         addSaveButton()
         removePillButton()
     }
@@ -307,7 +307,7 @@ class SelectedVideoViewController: UIViewController {
         
         imagePicker.imagePicked = { [weak self] imageURL in
             self?.selectedVideoView.addImage(image: imageURL)
-            self?.selectedVideoView.buttonsStack.layer.opacity = 0
+            self?.selectedVideoView.buttonStack.layer.opacity = 0
             self?.selectedVideoView.addSaveButton()
             self?.selectedVideoView.removePillButton()
         }
