@@ -67,7 +67,6 @@ class Button: UIButton {
         setAttributedTitle(attributedStringHighlighted, for: .highlighted)
         
         translatesAutoresizingMaskIntoConstraints = false
-        setTitleColor(.primaryButtonText, for: .normal)
         layer.cornerRadius = 4
         
         contentEdgeInsets = UIEdgeInsets(top: 0, left: 19, bottom: 0, right: 19)
