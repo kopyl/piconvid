@@ -5,11 +5,15 @@ import Lottie
 
 func getVideoAspectRatio(from playerViewController: AVPlayerViewController) -> CGFloat? {
     guard let asset = playerViewController.player?.currentItem?.asset else { return nil }
-    let tracks = asset.tracks(withMediaType: .video)
-    guard let track = tracks.first else { return nil }
-    
+    guard let track = asset.tracks(withMediaType: .video).first else { return nil }
+
     let size = track.naturalSize
-    return size.width / size.height
+    let transform = track.preferredTransform
+    let transformedSize = size.applying(transform)
+
+    let width = abs(transformedSize.width)
+    let height = abs(transformedSize.height)
+    return width / height
 }
 
 class SelectedVideoView: UIView {
