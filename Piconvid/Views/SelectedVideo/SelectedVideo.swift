@@ -45,6 +45,11 @@ class SelectedVideoView: UIView {
     
     private var dragHintHidingTask: Task<(), Never>?
     public var isVideoSaving = false
+    public var videoAspectRatio: CGFloat = 0
+    
+    public var containerAspectRatio: CGFloat {
+        mainContentContainer.frame.width / mainContentContainer.frame.height
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -109,24 +114,13 @@ class SelectedVideoView: UIView {
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         mainContentContainer.addSubview(playerViewController.view)
         
-        guard let videoAspectRatio = getVideoAspectRatio(from: playerViewController) else { return }
+        videoAspectRatio = getVideoAspectRatio(from: playerViewController) ?? 0
         
         NSLayoutConstraint.activate([
             playerViewController.view.centerXAnchor.constraint(equalTo: mainContentContainer.centerXAnchor),
             playerViewController.view.centerYAnchor.constraint(equalTo: mainContentContainer.centerYAnchor),
             playerViewController.view.widthAnchor.constraint(equalTo: mainContentContainer.widthAnchor),
         ])
-        
-        DispatchQueue.main.async {
-            let containerAspectRatio = self.mainContentContainer.frame.width / self.mainContentContainer.frame.height
-            
-            NSLayoutConstraint.activate([
-                self.playerViewController.view.heightAnchor.constraint(
-                    equalTo: self.playerViewController.view.widthAnchor,
-                    multiplier: 1 / max(videoAspectRatio, containerAspectRatio)
-                )
-            ])
-        }
     }
     
     private func addPillButton() {
@@ -582,6 +576,16 @@ class SelectedVideoViewController: UIViewController {
             self?.playerViewController.player = AVPlayer(url: videoURL)
             self?.playerViewController.player?.play()
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        NSLayoutConstraint.activate([
+            self.playerViewController.view.heightAnchor.constraint(
+                equalTo: self.playerViewController.view.widthAnchor,
+                multiplier: 1 / max(selectedVideoView.videoAspectRatio, selectedVideoView.containerAspectRatio)
+                
+            )
+        ])
     }
     
     private func moveToVideoEditor(imageURL: URL) {
