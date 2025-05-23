@@ -93,7 +93,7 @@ class SelectedVideoView: UIView {
     }
     
     public func addLottieAnimation() {
-        confettiAnimation = ConfettiAnimationView(name: "confetti-lottie")
+        confettiAnimation = ConfettiAnimationView()
         addSubview(confettiAnimation!)
         confettiAnimation?.placeAtTheBottom(of: self)
     }

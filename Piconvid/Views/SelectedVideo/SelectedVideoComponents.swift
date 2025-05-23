@@ -245,7 +245,7 @@ class ConfettiAnimationView: LottieAnimationView {
     private var name: String
     var hapticEngine: CHHapticEngine?
     
-    init(name: String) {
+    init(name: String = "confetti-lottie") {
         self.name = name
         
         let animation = LottieAnimation.named(name, bundle: Bundle.main, subdirectory: nil, animationCache: LottieAnimationCache.shared)
