@@ -116,7 +116,7 @@ class DraggableImageView: UIImageView {
 
     public func isHigherThanVideo() -> Bool {
         guard let playerView = playerViewController?.view else { return false }
-        return self.frame.minY < playerView.frame.minY
+        return self.frame.height > playerView.frame.height
     }
 }
 
